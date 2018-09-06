@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Pairing Timer</title>
+  
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no"/>
+  <meta name="google" content="notranslate"/>
+  <meta name="msapplication-tap-highlight" content="no"/>
+  <meta http-equiv="cache-control" content="no-store"/>
+  <meta http-equiv="expires" content="0"/>
+  
+  <link rel="shortcut icon" href="https://cdn.glitch.com/ce24a2eb-06b1-4db8-b239-f112690a5c04%2Fspinning-pear-still.png?1534594901659" type="image/x-icon" />
+
+  <link rel="stylesheet" type="text/css" href="style.css">
+  
+  <!-- development version, includes helpful console warnings -->
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  
+  <!-- production version, optimized for size and speed -->
+  <!--   <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
+
+  <script src="client.js" defer></script>
+</head>
+<body>
+  <div id="app">
+    <h1>
+      Pairing Timer
+    </h1>
+    
+    <div class="timer">
+      {{sharedState.timerRemainingTimeFormatted}}    
+      <div class="pear-loader">
+        <img
+          v-if="sharedState.timer"
+          class="pear-loader__image"
+          src="https://cdn.glitch.com/ce24a2eb-06b1-4db8-b239-f112690a5c04%2Fspinning-pear.gif?1534594901542"
+          role="presentation"
+        />
+        <img
+          v-else
+          class="pear-loader__image"
+          src="https://cdn.glitch.com/ce24a2eb-06b1-4db8-b239-f112690a5c04%2Fspinning-pear-still.png?1534594901659"
+          role="presentation"
+        />
+        <div class="pear-loader__bar" v-bind:style="{ height: ((!sharedState.timer && !sharedState.timerPaused) ? 0 : (100 - sharedState.timerProgressPercentage)) + '%' }"></div>
+      </div>
+    </div>
+    
+    <button
+      v-on:click="handleStartPauseTimerClick"
+      class="button button--bigger button--primary"
+    >
+      <span v-if="!sharedState.timer">
+        Start
+      </span>
+      <span v-else>
+        Stop
+      </span>
+    </button>
+    
+    <button
+      v-on:click="handleResetTimerClick"  
+      class="button button--bigger button--secondary"
+    >
+      Reset
+    </button>
+    
+    <h2>
+      Timer
+    </h2>
+    
+    <div class="input">
+      <label
+        class="input__label"
+        for="timer-end-time"
+      >
+        Timer end time (minutes)
+      </label>
+      <input
+        class="input__field"
+        v-model="sharedState.timerEndTimeMinutes"
+        v-on:change="handleTimerEndTimeMinutesChange"
+        type="number"
+        min="1"
+        step="1"
+      />      
+    </div>
+    
+    <div class="toggle">
+      <button
+        role="switch"
+        :aria-checked="sharedState.timerRepeatAtEndEnabled"
+        aria-labelledby="timer-repeat-at-end-enabled"
+        class="toggle__button"
+        v-on:click="handleTimerRepeatAtEndEnabledClick"  
+      >
+        <span 
+          class="toggle__button__part"
+          v-bind:class="{ 'toggle__button__part--active': !sharedState.timerRepeatAtEndEnabled }"
+        >
+          Off
+        </span>
+        <span
+          class="toggle__button__part"
+          v-bind:class="{ 'toggle__button__part--active': sharedState.timerRepeatAtEndEnabled }"
+        >
+          On
+        </span>
+      </button>  
+      <span
+        class="toggle__label"
+        id="timer-repeat-at-end-enabled"
+      >
+        Repeat timer automatically
+      </span>    
+    </div>
+  
+    <h2>
+      Audio
+    </h2>
+    
+    <div class="toggle">
+      <button
+        role="switch"
+        :aria-checked="sharedState.audioEnabled"
+        aria-labelledby="audio-enabled"
+        class="toggle__button"
+        v-on:click="handleToggleAudioClick"  
+      >
+        <span 
+          class="toggle__button__part"
+          v-bind:class="{ 'toggle__button__part--active': !sharedState.audioEnabled }"
+        >
+          Off
+        </span>
+        <span
+          class="toggle__button__part"
+          v-bind:class="{ 'toggle__button__part--active': sharedState.audioEnabled }"
+        >
+          On
+        </span>
+      </button>  
+      <span
+        class="toggle__label"
+        id="audio-enabled"
+      >
+        Audio
+      </span>    
+    </div>
+    
+    <button
+      v-bind:disabled="!sharedState.audioEnabled"
+      v-on:click="handleTestAudioClick"
+      class="button button--secondary"
+    >
+      Test audio
+    </button>
+    
+    <h2>
+      Notifications
+    </h2>
+    <span v-if="sharedState.notificationPermission === 'denied'">
+      Notifications are blocked. You'll need to reallow them to handle notifications.
+    </span>
+    
+    <div class="toggle">
+      <button
+        role="switch"
+        :aria-checked="sharedState.notificationsEnabled"
+        aria-labelledby="notifications-enabled"
+        class="toggle__button"
+        v-on:click="handleToggleNotificationsClick"  
+      >
+        <span 
+          class="toggle__button__part"
+          v-bind:class="{ 'toggle__button__part--active': !sharedState.notificationsEnabled }"
+        >
+          Off
+        </span>
+        <span
+          class="toggle__button__part"
+          v-bind:class="{ 'toggle__button__part--active': sharedState.notificationsEnabled }"
+        >
+          On
+        </span>
+      </button>   
+      <span
+        class="toggle__label"
+        id="notifications-enabled"
+      >
+        Notifications
+      </span>   
+    </div>
+    
+    <button
+      v-bind:disabled="!sharedState.notificationsEnabled"
+      v-on:click="handleTestNotificationsClick"
+      class="button button--secondary"
+    >
+      Test push notification
+    </button>
+    
+    <h2>
+      Data
+    </h2>
+    
+    <button
+      v-on:click="handleClearDataClick"
+      class="button button--secondary"
+    >
+      Clear data
+    </button>
+    
+  </div>
+ </body>
+</html>
