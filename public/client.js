@@ -117,7 +117,7 @@ function main() {
       console.log(this.state.timerCurrentTimeSeconds, this.state.timerEndTimeSeconds)
       
       const formattedTimeRemaining = formatTimeFromSeconds(
-        this.state.timerEndTimeSeconds = this.state.timerCurrentTimeSeconds
+        this.state.timerEndTimeSeconds - this.state.timerCurrentTimeSeconds
       )
       this.state.timerRemainingTimeFormatted = formattedTimeRemaining
       this.setTitle(formattedTimeRemaining)
@@ -366,9 +366,11 @@ function main() {
     document.addEventListener('visibilitychange', () => {
       if (store.debug) console.log(document.hidden ? 'Page in background' : 'Page open in tab')
       
-      store.setTimerRunning(false)
-      store.setTimerIntervalSeconds(document.hidden ? 2 : 1)
-      store.setTimerRunning(true)
+      if (store.timerRunning) {
+        store.setTimerRunning(false)
+        store.setTimerIntervalSeconds(document.hidden ? 2 : 1)
+        store.setTimerRunning(true)
+      }
     }, false)
   }
   
