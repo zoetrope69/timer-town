@@ -117,7 +117,7 @@ function main() {
       console.log(this.state.timerCurrentTimeSeconds, this.state.timerEndTimeSeconds)
       
       const formattedTimeRemaining = formatTimeFromSeconds(
-        this.state.timerEndTimeSeconds = this.state.timerCurrentTimeSeconds
+        this.state.timerEndTimeSeconds - this.state.timerCurrentTimeSeconds
       )
       this.state.timerRemainingTimeFormatted = formattedTimeRemaining
       this.setTitle(formattedTimeRemaining)
@@ -204,8 +204,8 @@ function main() {
       this.setAudio(SOUNDS[newValue])
     },
     
-    setAudio (newValue) {
-      if (this.debug) console.log('setAudio triggered with', newValue)
+    setSound (newValue) {
+      if (this.debug) console.log('setSound triggered with', newValue)
       
       const newAudio = new Audio(newValue)
       newAudio.preload = true
