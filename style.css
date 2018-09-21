@@ -1,4 +1,6 @@
-*::before, *, *::after {
+*::before,
+*,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -6,7 +8,7 @@
 
 *:focus {
   outline: none;
-  box-shadow: 0 0 0 2px white, 0 0 0 4px rgba(0, 0, 255, 0.5);
+  box-shadow: 0 0 0 2px white, 0 0 0 5px rgba(0, 0, 255, 0.5);
 }
 
 body {
@@ -18,7 +20,7 @@ body {
 
 input,
 select,
-button { 
+button {
   border: 0;
   background: none;
   font: inherit;
@@ -64,16 +66,16 @@ h2 {
   margin-right: 0.75em;
   margin-bottom: 0.75em;
   padding: 0.5em 1em;
-  
+
   font-weight: 700;
   border-radius: 5px;
   border: 3px solid transparent;
   cursor: pointer;
-  
+
   transition: all 0.1s ease-in-out;
 }
 
-.button--bigger {  
+.button--bigger {
   margin-right: 0.5em;
   padding: 0.75em 1em;
   font-size: 1.75em;
@@ -107,30 +109,33 @@ h2 {
 .toggle__button {
   position: relative;
   display: flex;
+  width: 100px;
   padding: 0.5em 1em;
   padding-left: 2.5em;
   margin-right: 1em;
   align-items: center;
-  
+  justify-content: flex-end;
+
   font-weight: 700;
-  
+
   border-radius: 50px;
   border: 3px solid #ffcc66;
-  
+
   cursor: pointer;
-  transition: padding 0.1s ease-in-out;
+  transition: all 0.1s ease-in-out;
 }
 
 .toggle__button--active {
   padding-left: 1em;
   padding-right: 2.5em;
+  justify-content: flex-start;
   background: #ffcc66;
 }
 
 .toggle__button::before {
-  content: '';
+  content: "";
   position: absolute;
-  left: 10px;
+  left: 5px;
   width: 30px;
   height: 30px;
   border-radius: 50%;
@@ -139,7 +144,7 @@ h2 {
 }
 
 .toggle__button--active::before {
-  left: calc(100% - 30px - 10px);
+  left: calc(100% - 30px - 5px);
 }
 
 .timer {
@@ -170,16 +175,29 @@ h2 {
   transition: height 1s linear;
 }
 
+.disabled-message {
+  margin-top: -0.05em;
+
+  font-size: 0.85em;
+  color: #585858;
+}
+
 @media (min-width: 800px) {
   body {
     font-size: 20px;
-    background-image: linear-gradient(to bottom right, white, white 60%, #ccffcc 60%, #ccffcc);
+    background-image: linear-gradient(
+      to bottom right,
+      white,
+      white 60%,
+      #ccffcc 60%,
+      #ccffcc
+    );
   }
-  
+
   .timer {
     font-size: 10em;
   }
-  
+
   .pear-loader {
     width: 148px;
     height: 164px;

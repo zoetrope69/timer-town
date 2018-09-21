@@ -1,0 +1,20 @@
+{
+  "short_name": "Pair Timer",
+  "name": "Pairing Timer",
+  "icons": [
+    {
+      "src": "images/pear-still.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "images/pear-still.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#fff",
+  "theme_color": "#ccffcc"
+}
