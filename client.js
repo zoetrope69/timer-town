@@ -423,7 +423,7 @@ function main() {
           role="switch"
           aria-labelledby="id"
           v-on:click="onClick"
-          :aria-checked="(isActive ? true : false )"
+          :aria-checked="isActive.toString()"
           class="toggle__button"
           :class="{ 'toggle__button--active': isActive }"
         >
