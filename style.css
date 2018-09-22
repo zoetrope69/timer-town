@@ -60,6 +60,7 @@ button {
   background: none;
   font: inherit;
   color: inherit;
+  -webkit-tap-highlight-color: transparent;
 }
 
 h1 {
