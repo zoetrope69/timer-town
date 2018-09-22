@@ -14,7 +14,7 @@ const SOUNDS = {
   'chief-chef': "sounds/chief-chef.mp3"
 };
 
-const DEFAULT_MINUTES_AMOUNT = 5;
+const DEFAULT_MINUTES_AMOUNT = 10;
 
 function parseTimeStringPart(timeString, timeAmountString) {
   if (timeString === "00") {
