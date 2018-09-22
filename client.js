@@ -11,7 +11,8 @@ const SOUNDS = {
   'bell': "sounds/bell.mp3",
   'foghorn': "sounds/foghorn.mp3",
   'music-box': "sounds/music-box.mp3",
-  'chief-chef': "sounds/chief-chef.mp3"
+  'chief-chef': "sounds/chief-chef.mp3",
+  'marshall-house': "sounds/marshall-house.mp3"
 };
 
 const DEFAULT_MINUTES_AMOUNT = 10;

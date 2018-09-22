@@ -1,4 +1,4 @@
-const version = "1.1.0";
+const version = "1.2.0";
 
 self.addEventListener("install", event => {
   event.waitUntil(
@@ -10,6 +10,7 @@ self.addEventListener("install", event => {
         "/sounds/foghorn.mp3",
         "/sounds/gong.mp3",
         "/sounds/music-box.mp3",
+        "/sounds/marshall-house.mp3",
         "/style.css",
         "/client.js",
         "/index.html"
