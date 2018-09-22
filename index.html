@@ -2,16 +2,17 @@
 <html lang="en">
 
 <head>
-  <title>Pairing Timer</title>
+  <title>Pizza Timer</title>
+  <meta name="Description" content="A timer for pair programming">
 
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#ccffcc">
+  <meta name="theme-color" content="#ffe0e0">
 
   <link rel="manifest" href="/site.manifest">
 
-  <link rel="shortcut icon" href="images/pear-spinning.gif" type="image/x-icon" />
+  <link rel="shortcut icon" href="images/pizza.png" type="image/x-icon" />
 
   <link rel="stylesheet" type="text/css" href="style.css">
 
@@ -26,23 +27,38 @@
 
 <body>
   <div id="app">
-    <h1>
-      Pairing Timer
-    </h1>
+    <div
+      class="faded"
+      :class="{ 'faded--active': sharedState.timerRunning }"
+    >
+      <h1>
+        Pizza Timer
+      </h1>
+      <p class="sub-title">A timer for pair programming</p>
+    </div>
 
     <div class="timer">
       {{ sharedState.timerRemainingTimeFormatted }}
 
-      <pear-loader :is-timer-running="sharedState.timerRunning" :timer-progress-percentage="sharedState.timerProgressPercentage">
-      </pear-loader>
+      <loader
+        :is-timer-running="sharedState.timerRunning"
+        :timer-progress-percentage="sharedState.timerProgressPercentage"
+      >
+      </loader>
     </div>
 
 
-    <button v-on:click="handleStartPauseTimerClick" class="button button--bigger button--primary">
+    <button
+      v-on:click="handleStartPauseTimerClick"
+      class="button button--bigger button--primary"
+    >
       {{ sharedState.timerRunning ? 'Stop' : 'Start' }}
     </button>
 
-    <button v-on:click="handleResetTimerClick" class="button button--bigger button--secondary">
+    <button
+      v-on:click="handleResetTimerClick"
+      class="button button--bigger button--secondary"
+    >
       Reset
     </button>
 
@@ -54,20 +70,35 @@
       <label class="input__label" for="timer-end-time">
         Timer end time (minutes)
       </label>
-      <input id="timer-end-time" class="input__field" v-model="sharedState.timerEndTimeMinutes" v-on:change="handleTimerEndTimeMinutesChange"
-        type="number" min="1" step="1" />
+      <input
+        id="timer-end-time"
+        class="input__field"
+        v-model="sharedState.timerEndTimeMinutes"
+        v-on:change="handleTimerEndTimeMinutesChange"
+        type="number"
+        min="1"
+        step="1"
+      />
     </div>
 
-    <toggle-button :id="'timer-repeat-at-end-enabled'" :on-click="handleTimerRepeatAtEndEnabledClick" :is-active="sharedState.timerRepeatAtEndEnabled"
-      :label="'Repeat timer automatically'">
+    <toggle-button
+      :id="'timer-repeat-at-end-enabled'"
+      :on-click="handleTimerRepeatAtEndEnabledClick"
+      :is-active="sharedState.timerRepeatAtEndEnabled"
+      :label="'Repeat timer automatically'"
+    >
     </toggle-button>
 
     <h2>
       Audio
     </h2>
 
-    <toggle-button :id="'audio-enabled'" :on-click="handleToggleAudioClick" :is-active="sharedState.audioEnabled"
-      :label="'Audio'">
+    <toggle-button
+      :id="'audio-enabled'"
+      :on-click="handleToggleAudioClick"
+      :is-active="sharedState.audioEnabled"
+      :label="'Audio'"
+    >
     </toggle-button>
 
     <div class="input">
@@ -75,7 +106,12 @@
         Sound
       </label>
 
-      <select id="sound-select" :disabled="!sharedState.audioEnabled" v-on:change="handleAudioSelectChange" class="input__select">
+      <select
+        id="sound-select"
+        :disabled="!sharedState.audioEnabled"
+        v-on:change="handleAudioSelectChange"
+        class="input__select"
+      >
         <option value="gong" :selected="sharedState.soundName === 'gong'">Gong</option>
         <option value="bell" :selected="sharedState.soundName === 'bell'">Bell</option>
         <option value="foghorn" :selected="sharedState.soundName === 'foghorn'">Foghorn</option>
@@ -84,7 +120,11 @@
       </select>
     </div>
 
-    <button :disabled="!sharedState.audioEnabled" v-on:click="handleTestAudioClick" class="button button--secondary">
+    <button
+      :disabled="!sharedState.audioEnabled"
+      v-on:click="handleTestAudioClick"
+      class="button button--secondary"
+    >
       Test audio
     </button>
     <p v-if="!sharedState.audioEnabled" class="disabled-message">
@@ -94,15 +134,23 @@
     <h2>
       Notifications
     </h2>
-    <p v-if="sharedState.notificationPermission === 'denied'" class="button button--secondary">
+
+    <toggle-button
+      :id="'notifications-enabled'"
+      :on-click="handleToggleNotificationsClick"
+      :is-active="sharedState.notificationsEnabled"
+      :label="'Notifications'"
+    >
+    </toggle-button>
+    <p v-if="sharedState.notificationPermission === 'denied'" class="disabled-message">
       Notifications are blocked. You'll need to reallow them to handle notifications.
     </p>
 
-    <toggle-button :id="'notifications-enabled'" :on-click="handleToggleNotificationsClick" :is-active="sharedState.notificationsEnabled"
-      :label="'Notifications'">
-    </toggle-button>
-
-    <button v-bind:disabled="!sharedState.notificationsEnabled" v-on:click="handleTestNotificationsClick" class="button button--secondary">
+    <button
+      v-bind:disabled="!sharedState.notificationsEnabled"
+      v-on:click="handleTestNotificationsClick"
+      class="button button--secondary"
+    >
       Test push notification
     </button>
     <p v-if="!sharedState.notificationsEnabled" class="disabled-message">

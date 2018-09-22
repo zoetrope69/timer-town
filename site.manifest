@@ -1,14 +1,14 @@
 {
-  "short_name": "Pair Timer",
-  "name": "Pairing Timer",
+  "short_name": "Timer",
+  "name": "Pizza Timer",
   "icons": [
     {
-      "src": "images/pear-still.png",
+      "src": "images/pizza.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "images/pear-still.png",
+      "src": "images/pizza.png",
       "type": "image/png",
       "sizes": "512x512"
     }
@@ -16,5 +16,5 @@
   "start_url": ".",
   "display": "standalone",
   "background_color": "#fff",
-  "theme_color": "#ccffcc"
+  "theme_color": "#ffe0e0"
 }

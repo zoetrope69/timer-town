@@ -1,8 +1,7 @@
 const DEBUG = false;
 
 const IMAGES = {
-  pear: "images/pear-still.png",
-  pearSpinning: "images/pear-spinning.gif"
+  pizza: "images/pizza.png"
 };
 
 const SOUNDS = {
@@ -93,10 +92,10 @@ function main() {
       if (this.debug) console.log("setTitle triggered");
 
       if (!title) {
-        document.title = "Pairing Timer";
+        document.title = "Pizza Timer";
       }
 
-      document.title = `${title} | Pairing Timer`;
+      document.title = `${title} | Pizza Timer`;
     },
 
     triggerEndOfTimer() {
@@ -307,14 +306,14 @@ function main() {
 
       const getTag = () => {
         if (test) {
-          return "pairing-timer-notification--test";
+          return "pizza-timer-notification--test";
         }
 
         if (timerRepeatAtEndEnabled) {
-          return "pairing-timer-notification--repeat";
+          return "pizza-timer-notification--repeat";
         }
 
-        return "pairing-timer-notification";
+        return "pizza-timer-notification";
       };
 
       const getActions = () => {
@@ -350,8 +349,8 @@ function main() {
           tag: getTag(),
           requireInteraction: getRequireInteraction(),
           body,
-          badge: IMAGES.pear,
-          icon: IMAGES.pear,
+          badge: IMAGES.pizza,
+          icon: IMAGES.pizza,
           image,
           actions: getActions(),
           data: getData()
@@ -440,18 +439,10 @@ function main() {
     `
   });
 
-  Vue.component("pear-loader", {
+  Vue.component("loader", {
     props: ["isTimerRunning", "timerProgressPercentage"],
 
     methods: {
-      loaderBarImage: function() {
-        if (this.isTimerRunning) {
-          return IMAGES.pearSpinning;
-        }
-
-        return IMAGES.pear;
-      },
-
       loaderBarStyles: function() {
         return { height: `${this.calcuateHeightOfLoaderBar()}%` };
       },
@@ -466,14 +457,17 @@ function main() {
     },
 
     template: `
-      <div class="pear-loader">
+      <div
+        class="loader"
+        :class="{ 'loader--active': isTimerRunning }"
+      >
         <img
-          class="pear-loader__image"
-          :src="loaderBarImage()"
+          class="loader__image"
+          :src="IMAGES.pizza"
           role="presentation"
         />
         <div
-          class="pear-loader__bar"
+          class="loader__bar"
           :style="loaderBarStyles()"
         >
         </div>

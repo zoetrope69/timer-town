@@ -8,14 +8,15 @@
 
 *:focus {
   outline: none;
-  box-shadow: 0 0 0 2px white, 0 0 0 5px rgba(0, 0, 255, 0.5);
+  box-shadow: 0 0 0 3px rgba(0, 0, 255, 0.5);
 }
 
 body {
   padding: 1em;
   font-family: sans-serif;
-  color: #24292e;
   font-size: 18px;
+  color: #24292e;
+  border-bottom: 150px solid #ffe0e0;
 }
 
 input,
@@ -28,12 +29,25 @@ button {
 }
 
 h1 {
-  color: grey;
+  color: #333;
+}
+
+.sub-title {
+  color: #626262;
+  margin-bottom: 1em;
 }
 
 h2 {
   margin-top: 1em;
   margin-bottom: 0.5em;
+}
+
+.faded {
+  transition: opacity 1s ease-out;
+}
+
+.faded--active {
+  opacity: 0.35;
 }
 
 .input {
@@ -58,10 +72,6 @@ h2 {
   cursor: initial;
 }
 
-.input__select {
-  padding: 2em;
-}
-
 .button {
   margin-right: 0.75em;
   margin-bottom: 0.75em;
@@ -83,9 +93,9 @@ h2 {
 }
 
 .button--primary {
-  background: #ffcc66;
-  border-color: #ffcc66;
-  color: black;
+  background: #00823b;
+  border-color: #00823b;
+  color: white;
 }
 
 .button--secondary {
@@ -153,21 +163,32 @@ h2 {
   font-size: 5em;
 }
 
-.pear-loader {
+.loader {
   display: inline-block;
   position: relative;
-  width: 74px;
-  height: 82px;
+  width: 70px;
+  height: 70px;
+  transform-origin: 10% 90%;
 }
 
-.pear-loader__bar,
-.pear-loader__image {
+@keyframes loaderMove {
+  to {
+    transform: translateY(5px) rotate(5deg);
+  }
+}
+
+.loader--active {
+  animation: loaderMove 0.5s 0.5s linear infinite alternate;
+}
+
+.loader__bar,
+.loader__image {
   position: absolute;
   width: 100%;
   height: 100%;
 }
 
-.pear-loader__bar {
+.loader__bar {
   mix-blend-mode: saturation;
   background: white;
   height: 0%;
@@ -177,6 +198,7 @@ h2 {
 
 .disabled-message {
   margin-top: -0.05em;
+  margin-bottom: 0.5em;
 
   font-size: 0.85em;
   color: #585858;
@@ -185,12 +207,13 @@ h2 {
 @media (min-width: 800px) {
   body {
     font-size: 20px;
+    border-bottom: none;
     background-image: linear-gradient(
       to bottom right,
       white,
       white 60%,
-      #ccffcc 60%,
-      #ccffcc
+      #ffe0e0 60%,
+      #ffe0e0
     );
   }
 
@@ -198,8 +221,8 @@ h2 {
     font-size: 10em;
   }
 
-  .pear-loader {
-    width: 148px;
-    height: 164px;
+  .loader {
+    width: 120px;
+    height:  120px;
   }
 }
