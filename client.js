@@ -1,22 +1,16 @@
 const DEBUG = false;
 
+// See footer for credits for images and sounds
+
 const IMAGES = {
   pizza: "images/pizza.png"
 };
 
 const SOUNDS = {
   'gong': "sounds/gong.mp3",
-  // http://soundbible.com/1815-A-Tone.html
-
   'bell': "sounds/bell.mp3",
-  // http://soundbible.com/2218-Service-Bell-Help.html
-
   'foghorn': "sounds/foghorn.mp3",
-  // http://soundbible.com/2142-FogHorn-Barge.html
-
   'music-box': "sounds/music-box.mp3",
-  // http://soundbible.com/1619-Music-Box.html
-
   'chief-chef': "sounds/chief-chef.mp3"
 };
 

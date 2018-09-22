@@ -27,143 +27,204 @@
 
 <body>
   <div id="app">
-    <div
-      class="faded"
-      :class="{ 'faded--active': sharedState.timerRunning }"
-    >
-      <h1>
-        Pizza Timer
-      </h1>
-      <p class="sub-title">A timer for pair programming</p>
-    </div>
-
-    <div class="timer">
-      {{ sharedState.timerRemainingTimeFormatted }}
-
-      <loader
-        :is-timer-running="sharedState.timerRunning"
-        :timer-progress-percentage="sharedState.timerProgressPercentage"
+    <main class="main">
+      <div
+        class="faded"
+        :class="{ 'faded--active': sharedState.timerRunning }"
       >
-      </loader>
-    </div>
+        <h1>
+          Pizza Timer
+        </h1>
+        <p class="sub-title">A timer for pair programming</p>
+      </div>
+
+      <div class="timer">
+        {{ sharedState.timerRemainingTimeFormatted }}
+
+        <loader
+          :is-timer-running="sharedState.timerRunning"
+          :timer-progress-percentage="sharedState.timerProgressPercentage"
+        >
+        </loader>
+      </div>
 
 
-    <button
-      v-on:click="handleStartPauseTimerClick"
-      class="button button--bigger button--primary"
-    >
-      {{ sharedState.timerRunning ? 'Stop' : 'Start' }}
-    </button>
+      <button
+        v-on:click="handleStartPauseTimerClick"
+        class="button button--bigger button--primary"
+      >
+        {{ sharedState.timerRunning ? 'Stop' : 'Start' }}
+      </button>
 
-    <button
-      v-on:click="handleResetTimerClick"
-      class="button button--bigger button--secondary"
-    >
-      Reset
-    </button>
+      <button
+        v-on:click="handleResetTimerClick"
+        class="button button--bigger button--secondary"
+      >
+        Reset
+      </button>
 
-    <h2>
-      Timer
-    </h2>
+      <h2>
+        Timer
+      </h2>
 
-    <div class="input">
-      <label class="input__label" for="timer-end-time">
-        Timer end time (minutes)
-      </label>
-      <input
-        id="timer-end-time"
-        class="input__field"
-        v-model="sharedState.timerEndTimeMinutes"
-        v-on:change="handleTimerEndTimeMinutesChange"
-        type="number"
-        min="1"
-        step="1"
-      />
-    </div>
+      <div class="input">
+        <label class="input__label" for="timer-end-time">
+          Timer end time (minutes)
+        </label>
+        <input
+          id="timer-end-time"
+          class="input__field"
+          v-model="sharedState.timerEndTimeMinutes"
+          v-on:change="handleTimerEndTimeMinutesChange"
+          type="number"
+          min="1"
+          step="1"
+        />
+      </div>
 
-    <toggle-button
-      :id="'timer-repeat-at-end-enabled'"
-      :on-click="handleTimerRepeatAtEndEnabledClick"
-      :is-active="sharedState.timerRepeatAtEndEnabled"
-      :label="'Repeat timer automatically'"
-    >
-    </toggle-button>
+      <toggle-button
+        :id="'timer-repeat-at-end-enabled'"
+        :on-click="handleTimerRepeatAtEndEnabledClick"
+        :is-active="sharedState.timerRepeatAtEndEnabled"
+        :label="'Repeat timer automatically'"
+      >
+      </toggle-button>
 
-    <h2>
-      Audio
-    </h2>
+      <h2>
+        Audio
+      </h2>
 
-    <toggle-button
-      :id="'audio-enabled'"
-      :on-click="handleToggleAudioClick"
-      :is-active="sharedState.audioEnabled"
-      :label="'Audio'"
-    >
-    </toggle-button>
+      <toggle-button
+        :id="'audio-enabled'"
+        :on-click="handleToggleAudioClick"
+        :is-active="sharedState.audioEnabled"
+        :label="'Audio'"
+      >
+      </toggle-button>
 
-    <div class="input">
-      <label class="input__label" for="sound-select">
-        Sound
-      </label>
+      <div class="input">
+        <label class="input__label" for="sound-select">
+          Sound
+        </label>
 
-      <select
-        id="sound-select"
+        <select
+          id="sound-select"
+          :disabled="!sharedState.audioEnabled"
+          v-on:change="handleAudioSelectChange"
+          class="input__select"
+        >
+          <option value="gong" :selected="sharedState.soundName === 'gong'">Gong</option>
+          <option value="bell" :selected="sharedState.soundName === 'bell'">Bell</option>
+          <option value="foghorn" :selected="sharedState.soundName === 'foghorn'">Foghorn</option>
+          <option value="music-box" :selected="sharedState.soundName === 'music-box'">Music Box</option>
+          <option value="chief-chef" :selected="sharedState.soundName === 'chief-chef'">Chief Chef</option>
+        </select>
+      </div>
+
+      <button
         :disabled="!sharedState.audioEnabled"
-        v-on:change="handleAudioSelectChange"
-        class="input__select"
+        v-on:click="handleTestAudioClick"
+        class="button button--secondary"
       >
-        <option value="gong" :selected="sharedState.soundName === 'gong'">Gong</option>
-        <option value="bell" :selected="sharedState.soundName === 'bell'">Bell</option>
-        <option value="foghorn" :selected="sharedState.soundName === 'foghorn'">Foghorn</option>
-        <option value="music-box" :selected="sharedState.soundName === 'music-box'">Music Box</option>
-        <option value="chief-chef" :selected="sharedState.soundName === 'chief-chef'">Chief Chef</option>
-      </select>
-    </div>
+        Test audio
+      </button>
+      <p v-if="!sharedState.audioEnabled" class="disabled-message">
+        Audio is disabled
+      </p>
 
-    <button
-      :disabled="!sharedState.audioEnabled"
-      v-on:click="handleTestAudioClick"
-      class="button button--secondary"
-    >
-      Test audio
-    </button>
-    <p v-if="!sharedState.audioEnabled" class="disabled-message">
-      Audio is disabled
-    </p>
+      <h2>
+        Notifications
+      </h2>
 
-    <h2>
-      Notifications
-    </h2>
+      <toggle-button
+        :id="'notifications-enabled'"
+        :on-click="handleToggleNotificationsClick"
+        :is-active="sharedState.notificationsEnabled"
+        :label="'Notifications'"
+      >
+      </toggle-button>
+      <p v-if="sharedState.notificationPermission === 'denied'" class="disabled-message">
+        Notifications are blocked. You'll need to reallow them to handle notifications.
+      </p>
 
-    <toggle-button
-      :id="'notifications-enabled'"
-      :on-click="handleToggleNotificationsClick"
-      :is-active="sharedState.notificationsEnabled"
-      :label="'Notifications'"
-    >
-    </toggle-button>
-    <p v-if="sharedState.notificationPermission === 'denied'" class="disabled-message">
-      Notifications are blocked. You'll need to reallow them to handle notifications.
-    </p>
+      <button
+        v-bind:disabled="!sharedState.notificationsEnabled"
+        v-on:click="handleTestNotificationsClick"
+        class="button button--secondary"
+      >
+        Test push notification
+      </button>
+      <p v-if="!sharedState.notificationsEnabled" class="disabled-message">
+        Notifications are disabled
+      </p>
+    </main>
 
-    <button
-      v-bind:disabled="!sharedState.notificationsEnabled"
-      v-on:click="handleTestNotificationsClick"
-      class="button button--secondary"
-    >
-      Test push notification
-    </button>
-    <p v-if="!sharedState.notificationsEnabled" class="disabled-message">
-      Notifications are disabled
-    </p>
+    <footer class="footer">
+      <h2>Data</h2>
 
-    <h2>
-      Data
-    </h2>
+      <button v-on:click="handleClearDataClick" class="button button--secondary">
+        Clear data
+      </button>
 
-    <button v-on:click="handleClearDataClick" class="button button--secondary">
-      Clear data
-    </button>
+      <h2>Credits</h2>
+
+      <ul class="footer__credits">
+        <li class="footer__credits__item">
+          <a
+            rel="noreferrer"
+            class="footer__credits__link"
+            href="https://web.archive.org/web/20091022051105/http://geocities.com/jhosel/index.html"
+          >
+            Pizza image
+          </a>
+        </li>
+        <li class="footer__credits__item">
+          <a
+            rel="noreferrer"
+            class="footer__credits__link"
+            href="http://soundbible.com/1815-A-Tone.html"
+          >
+            Gong sound
+          </a>
+        </li>
+        <li class="footer__credits__item">
+          <a
+            rel="noreferrer"
+            class="footer__credits__link"
+            href="http://soundbible.com/2218-Service-Bell-Help.html"
+          >
+            Bell sound
+          </a>
+        </li>
+        <li class="footer__credits__item">
+          <a
+            rel="noreferrer"
+            class="footer__credits__link"
+            href="http://soundbible.com/2142-FogHorn-Barge.html"
+          >
+            Foghorn sound
+          </a>
+        </li>
+        <li class="footer__credits__item">
+          <a
+            rel="noreferrer"
+            class="footer__credits__link"
+            href="http://soundbible.com/1619-Music-Box.html"
+          >
+            Music box sound
+          </a>
+        </li>
+      </ul>
+
+      
+      <a class="footer__link" href="https://zaccolley.com">
+        <span aria-hidden>🍕</span> Made by Zac
+      </a>
+
+      <a class="footer__link" href="https://github.com/zaccolley/pizza-timer">
+        <span aria-hidden>💽</span> Issues/code on GitHub
+      </a>
+    </footer>
   </div>
 </body>
 
