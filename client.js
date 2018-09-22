@@ -5,19 +5,19 @@ const IMAGES = {
 };
 
 const SOUNDS = {
-  gong: "sounds/gong.mp3",
+  'gong': "sounds/gong.mp3",
   // http://soundbible.com/1815-A-Tone.html
 
-  bell: "sounds/bell.mp3",
+  'bell': "sounds/bell.mp3",
   // http://soundbible.com/2218-Service-Bell-Help.html
 
-  foghorn: "sounds/foghorn.mp3",
+  'foghorn': "sounds/foghorn.mp3",
   // http://soundbible.com/2142-FogHorn-Barge.html
 
-  musicBox: "sounds/music-box.mp3",
+  'music-box': "sounds/music-box.mp3",
   // http://soundbible.com/1619-Music-Box.html
 
-  chiefChef: "sounds/chief-chef.mp3"
+  'chief-chef': "sounds/chief-chef.mp3"
 };
 
 const DEFAULT_MINUTES_AMOUNT = 5;
@@ -126,11 +126,6 @@ function main() {
     setTimeProgressPercentage() {
       if (this.debug) console.log("setTimeProgressPercentage triggered");
 
-      console.log(
-        this.state.timerCurrentTimeSeconds,
-        this.state.timerEndTimeSeconds
-      );
-
       const formattedTimeRemaining = formatTimeFromSeconds(
         this.state.timerEndTimeSeconds - this.state.timerCurrentTimeSeconds
       );
@@ -164,8 +159,7 @@ function main() {
     },
 
     setTimerCurrentTime(newValue) {
-      if (this.debug)
-        console.log("setTimerCurrentTime triggered with", newValue);
+      if (this.debug) console.log("setTimerCurrentTime triggered with", newValue);
 
       this.state.timerCurrentTimeSeconds = newValue;
       this.setTimeProgressPercentage();
@@ -185,8 +179,7 @@ function main() {
     },
 
     setTimerIntervalSeconds(newValue) {
-      if (this.debug)
-        console.log("setTimerIntervalSeconds triggered with", newValue);
+      if (this.debug) console.log("setTimerIntervalSeconds triggered with", newValue);
       this.state.timerIntervalSeconds = newValue;
     },
 
@@ -209,8 +202,7 @@ function main() {
     },
 
     setTimerRepeatAtEndEnabled(newValue) {
-      if (this.debug)
-        console.log("setTimeRepeatAtEnd triggered with", newValue);
+      if (this.debug) console.log("setTimeRepeatAtEnd triggered with", newValue);
 
       if ("localStorage" in window) {
         window.localStorage.setItem("timerRepeatAtEndEnabled", newValue);
@@ -270,14 +262,12 @@ function main() {
     },
 
     setNotificationsDurationSeconds(newValue) {
-      if (this.debug)
-        console.log("setNotificationsDurationSeconds triggered with", newValue);
+      if (this.debug) console.log("setNotificationsDurationSeconds triggered with", newValue);
       this.state.notificationsDurationSeconds = newValue;
     },
 
     setNotificationsEnabled(newValue) {
-      if (this.debug)
-        console.log("setNotificationsEnabled triggered with", newValue);
+      if (this.debug) console.log("setNotificationsEnabled triggered with", newValue);
 
       if ("localStorage" in window) {
         window.localStorage.setItem("notificationsEnabled", newValue);
@@ -286,8 +276,7 @@ function main() {
     },
 
     handleNotificationPermission(newValue) {
-      if (this.debug)
-        console.log("handleNotificationPermission triggered with", newValue);
+      if (this.debug) console.log("handleNotificationPermission triggered with", newValue);
 
       this.state.notificationPermission = newValue;
 
@@ -398,10 +387,7 @@ function main() {
     document.addEventListener(
       "visibilitychange",
       () => {
-        if (store.debug)
-          console.log(
-            document.hidden ? "Page in background" : "Page open in tab"
-          );
+        if (store.debug) console.log(document.hidden ? "Page in background" : "Page open in tab");
 
         if (store.timerRunning) {
           store.setTimerRunning(false);

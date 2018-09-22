@@ -1,9 +1,19 @@
-const version = "0.0.1";
+const version = "1.0.0";
 
 self.addEventListener("install", event => {
   event.waitUntil(
     caches.open(version + "fundamentals").then(cache => {
-      return cache.addAll(["/style.css", "/client.js", "/index.html"]);
+      return cache.addAll([
+        "/images/pizza.png",
+        "/sounds/bell.mp3",
+        "/sounds/chief-chef.mp3",
+        "/sounds/foghorn.mp3",
+        "/sounds/gong.mp3",
+        "/sounds/music-box.mp3",
+        "/style.css",
+        "/client.js",
+        "/index.html"
+      ]);
     })
   );
 });
@@ -82,8 +92,6 @@ self.addEventListener("notificationclose", event => {
 
 self.addEventListener("notificationclick", event => {
   event.notification.close();
-
-  console.log("event", event);
 
   event.waitUntil(
     (async function() {
