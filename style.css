@@ -14,7 +14,7 @@
 body {
   font-family: sans-serif;
   font-size: 18px;
-  color: #24292e;
+  color: #202040;
   border-top: 10px solid #ffe0e0;
 }
 
@@ -40,7 +40,7 @@ body {
 .footer__link {
   text-decoration: none;
   font-weight: 600;
-  color: black;
+  color: #202040;
 }
 
 .footer__credits__link:hover,
@@ -63,12 +63,12 @@ button {
   -webkit-tap-highlight-color: transparent;
 }
 
-h1 {
-  color: #333;
+.title {
+  color: #532323;
 }
 
 .sub-title {
-  color: #626262;
+  color: #936f6f;
   margin-bottom: 1em;
 }
 
@@ -98,7 +98,7 @@ h2 {
 .input__select {
   padding: 0.5em 0.75em;
   background: white;
-  border: 3px solid black;
+  border: 3px solid #202040;
 }
 
 .input__field:disabled,
@@ -141,7 +141,7 @@ h2 {
 .button--secondary {
   background: white;
   border-color: #ffcc66;
-  color: black;
+  color: #202040;
 }
 
 .button:disabled {
@@ -194,7 +194,7 @@ h2 {
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  background: black;
+  background: #202040;
   transition: left 0.1s ease-out;
 }
 
