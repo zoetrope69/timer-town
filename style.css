@@ -109,6 +109,7 @@ h2:first-child {
 .input__field,
 .input__select {
   padding: 0.5em 0.75em;
+  font-size: 1.25em;
   background: white;
   border: 3px solid #202040;
 }
@@ -150,10 +151,18 @@ h2:first-child {
   color: white;
 }
 
-.button--secondary {
+.button--secondary,
+.button--tertiary {
   background: white;
-  border-color: #ffcc66;
   color: #202040;
+}
+
+.button--secondary {
+  border-color: #ffcc66;
+}
+
+.button--tertiary {
+  border-color: #c9c9c9;
 }
 
 .button:disabled {
