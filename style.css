@@ -73,8 +73,12 @@ button {
 }
 
 h2 {
+  margin-top: 1.75em;
+  margin-bottom: 0.75em;
+}
+
+h2:first-child {
   margin-top: 1em;
-  margin-bottom: 0.5em;
 }
 
 .faded {
@@ -86,7 +90,7 @@ h2 {
 }
 
 .input {
-  margin-bottom: 0.75em;
+  margin-bottom: 1em;
 }
 
 .input__label {
@@ -151,7 +155,7 @@ h2 {
 }
 
 .toggle {
-  margin-bottom: 0.75em;
+  margin-bottom: 1em;
   display: flex;
   align-items: center;
 }
