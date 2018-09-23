@@ -89,6 +89,14 @@ h2:first-child {
   opacity: 0.35;
 }
 
+.faded--active:hover,
+.faded--active:active,
+.faded--active:focus,
+.faded--active:focus-within {
+  opacity: 1;
+  transition-duration: 0.33s;
+}
+
 .input {
   margin-bottom: 1em;
 }
