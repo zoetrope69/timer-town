@@ -1,19 +1,20 @@
-const version = "1.7.0";
+const version = "1.7.1";
 
 self.addEventListener("install", event => {
   event.waitUntil(
     caches.open(version + "fundamentals").then(cache => {
       return cache.addAll([
+        "/client.js",
+        "/index.html",
         "/images/pizza.png",
+        "/sounds/beano-yelp.mp3",
         "/sounds/bell.mp3",
         "/sounds/chief-chef.mp3",
         "/sounds/foghorn.mp3",
         "/sounds/gong.mp3",
         "/sounds/music-box.mp3",
         "/sounds/marshall-house.mp3",
-        "/style.css",
-        "/client.js",
-        "/index.html"
+        "/style.css"
       ]);
     })
   );
