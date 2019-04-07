@@ -128,7 +128,7 @@ function main() {
         this.spawnNotification({
           title: "Timer finished",
           body: this.state.timerRepeatAtEndEnabled
-            ? "Timer starting again"
+            ? "Timer starting again. Click to stop timer again."
             : "Click to start timer again"
         });
       }
@@ -325,8 +325,14 @@ function main() {
       };
 
       const getActions = () => {
-        if (timerRepeatAtEndEnabled || test) {
+        if (test) {
           return [];
+        }
+
+        if (timerRepeatAtEndEnabled) {
+          return [
+            { action: "stop", title: "Stop" }
+          ];
         }
 
         return [
@@ -346,34 +352,32 @@ function main() {
       const getData = () => {
         return {
           test,
-          timerRepeatAtEndEnabled: true,
-          notificationsDurationSeconds: 1,
+          timerRepeatAtEndEnabled,
+          notificationsDurationSeconds,
           url: location.href
         };
       };
 
-      return new Promise((resolve, reject) => {
-        const notificationOptions = {
-          tag: getTag(),
-          requireInteraction: getRequireInteraction(),
-          body,
-          badge: IMAGES.pizza,
-          icon: IMAGES.pizza,
-          image,
-          actions: getActions(),
-          data: getData()
-        };
+      const notificationOptions = {
+        tag: getTag(),
+        requireInteraction: getRequireInteraction(),
+        body,
+        badge: IMAGES.pizza,
+        icon: IMAGES.pizza,
+        image,
+        actions: getActions(),
+        data: getData()
+      };
 
-        navigator.serviceWorker.ready.then(registration => {
-          registration.getNotifications().then(notifications => {
-            // close exisiting notifications
-            notifications.forEach(notification => {
-              notification.close();
-            });
-
-            // show new notification
-            registration.showNotification(title, notificationOptions);
+      navigator.serviceWorker.ready.then(registration => {
+        registration.getNotifications().then(notifications => {
+          // close exisiting notifications
+          notifications.forEach(notification => {
+            notification.close();
           });
+
+          // show new notification
+          registration.showNotification(title, notificationOptions);
         });
       });
     },
@@ -412,18 +416,23 @@ function main() {
     if (store.debug) console.log("Data from notificaton event", event.data);
     const { data } = event;
 
-    if (data.close) {
+    const dontDoAnthing = data.close ||
+                          data.dataSentToNotification.test; // test notification
+    if (dontDoAnthing) {
       return;
     }
 
-    if (data.dataSentToNotification.test) {
+    const stopTimer = data.dataSentToNotification.timerRepeatAtEndEnabled ||
+                      data.action === "stop";
+    if (stopTimer) {
+      store.setTimerCurrentTime(0);
+      store.setTimerPaused(false);
+      store.setTimerRunning(false);
       return;
     }
 
-    if (data.action === "stop") {
-      return;
-    }
-
+    // otherwise you've clicked the notification/start button
+    // start the timer again
     store.setTimerCurrentTime(0);
     store.setTimerRunning(true);
   });
@@ -629,7 +638,7 @@ function main() {
       },
 
       handleTestNotificationsClick: function() {
-        return store.spawnNotification({
+        store.spawnNotification({
           title: "This is a test notification",
           test: true
         });
