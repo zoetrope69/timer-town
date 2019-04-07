@@ -1,3 +1,70 @@
+/* vue helper css */
+[v-cloak] {
+  display: none;
+}
+
+.loading--invisible {
+  visibility: hidden;
+}
+
+/* default for light mode */
+:root,
+.color-scheme--light {
+  --color-background: #fff;
+  --color-background-accent: #ffe0e0;
+  --color-background-footer: #f3f3f3;
+
+  --color-body-text: #202040;
+  --color-body-text-disabled: #570d0d;
+  
+  --color-title:#532323;
+  --color-sub-title: #675252;
+
+  --color-focus-highlight: rgba(0, 0, 255, 0.5);
+  
+  --color-input-primary: #00823b;
+  --color-input-secondary: #ffcc66;
+  --color-input-disabled: #d3d3d3;
+}
+
+.color-scheme--dark {
+  --color-background: #1c082a;
+  --color-background-accent: #3d1e45;
+  --color-background-footer: #320030;
+
+  --color-body-text: #ffcc66;
+  --color-body-text-disabled: #ffbcbc;
+  
+  --color-title: #ff86d8;
+  --color-sub-title: #d15ba8;
+  
+  --color-focus-highlight: rgba(253, 152, 255, 0.75);
+  
+  --color-input-primary: #27d4bc;
+  --color-input-secondary: #383844;
+  --color-input-disabled: #d3d3d3;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-background: #1c082a;
+    --color-background-accent: #3d1e45;
+    --color-background-footer: #320030;
+  
+    --color-body-text: #ffcc66;
+    --color-body-text-disabled: #ffbcbc;
+    
+    --color-title: #ff86d8;
+    --color-sub-title: #d15ba8;
+    
+    --color-focus-highlight: rgba(253, 152, 255, 0.75);
+    
+    --color-input-primary: #27d4bc;
+    --color-input-secondary: #383844;
+    --color-input-disabled: #d3d3d3;
+  }
+}
+
 *::before,
 *,
 *::after {
@@ -8,14 +75,18 @@
 
 *:focus {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(0, 0, 255, 0.5);
+  box-shadow: 0 0 0 3px var(--color-focus-highlight);
 }
 
 body {
   font-family: sans-serif;
   font-size: 18px;
-  color: #202040;
-  border-top: 10px solid #ffe0e0;
+}
+
+#app {
+  color: var(--color-body-text);
+  background: var(--color-background);
+  border-top: 10px solid var(--color-background-accent);
 }
 
 .main,
@@ -24,7 +95,7 @@ body {
 }
 
 .footer {
-  background: whiteSmoke;
+  background: var(--color-background-footer);
 }
 
 .footer__credits {
@@ -40,7 +111,7 @@ body {
 .footer__link {
   text-decoration: none;
   font-weight: 600;
-  color: #202040;
+  color: var(--color-body-text);
 }
 
 .footer__credits__link:hover,
@@ -64,11 +135,11 @@ button {
 }
 
 .title {
-  color: #532323;
+  color: var(--color-title);
 }
 
 .sub-title {
-  color: #675252;
+  color: var(--color-sub-title);
   margin-bottom: 1em;
 }
 
@@ -110,14 +181,15 @@ h2:first-child {
 .input__select {
   padding: 0.5em 0.75em;
   font-size: 1.25em;
-  background: white;
-  border: 3px solid #202040;
+  background: var(--color-background);
+  border: 3px solid var(--color-body-text);
 }
 
 .input__field:disabled,
 .input__select:disabled {
-  background: lightgrey;
-  border-color: lightgrey;
+  background: var(--color-input-disabled);
+  border-color: var(--color-input-disabled);
+  color: var(--color-background);
   cursor: initial;
 }
 
@@ -146,28 +218,29 @@ h2:first-child {
 }
 
 .button--primary {
-  background: #00823b;
-  border-color: #00823b;
-  color: white;
+  background: var(--color-input-primary);
+  border-color: var(--color-input-primary);
+  color: var(--color-background);
 }
 
 .button--secondary,
 .button--tertiary {
-  background: white;
-  color: #202040;
+  background: var(--color-background);
+  color: var(--color-body-text);
 }
 
 .button--secondary {
-  border-color: #ffcc66;
+  border-color: var(--color-input-secondary);
 }
 
 .button--tertiary {
-  border-color: #c9c9c9;
+  border-color: var(--color-background);
 }
 
 .button:disabled {
-  background: lightgrey;
-  border-color: lightgrey;
+  background: var(--color-input-disabled);
+  border-color: var(--color-input-disabled);
+  color: var(--color-background);
   cursor: initial;
 }
 
@@ -190,8 +263,8 @@ h2:first-child {
   font-weight: 700;
 
   border-radius: 50px;
-  border: 3px solid #ffcc66;
-  background: white;
+  border: 3px solid var(--color-input-secondary);
+  background: var(--color-background);
 
   cursor: pointer;
   transition: all 0.1s ease-in-out;
@@ -205,7 +278,7 @@ h2:first-child {
   padding-left: 1em;
   padding-right: 2.5em;
   justify-content: flex-start;
-  background: #ffcc66;
+  background: var(--color-input-secondary);
 }
 
 .toggle__button::before {
@@ -215,7 +288,7 @@ h2:first-child {
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  background: #202040;
+  background: var(--color-body-text);
   transition: left 0.1s ease-out;
 }
 
@@ -257,30 +330,36 @@ h2:first-child {
 
 .loader__bar {
   mix-blend-mode: saturation;
-  background: white;
+  background: var(--color-background);
   height: 0%;
   bottom: 0;
   transition: height 1s linear;
 }
 
-.disabled-message {
+.message {
   margin-top: -0.05em;
-  margin-bottom: 0.5em;
+  margin-bottom: 1em;
 
   font-size: 0.85em;
-  color: #585858;
+}
+
+.message--disabled {
+  color: var(--color-body-text-disabled);
 }
 
 @media (min-width: 600px) {
   body {
     font-size: 19px;
+  }
+
+  #app{
     border: none;
     background-image: linear-gradient(
       15deg,
-    white,
-    white 95%,
-    #ffe0e0 95%,
-    #ffe0e0
+    var(--color-background),
+    var(--color-background) 95%,
+    var(--color-background-accent) 95%,
+    var(--color-background-accent)
     );
   }
 
@@ -298,12 +377,15 @@ h2:first-child {
 @media (min-width: 900px) {
   body {
     font-size: 20px;
+  }
+
+  #app {
     background-image: linear-gradient(
       110deg,
-      white,
-      white 60%,
-      #ffe0e0 60%,
-      #ffe0e0
+      var(--color-background),
+      var(--color-background) 60%,
+      var(--color-background-accent) 60%,
+      var(--color-background-accent)
     );
   }
 

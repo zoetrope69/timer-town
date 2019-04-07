@@ -5,10 +5,15 @@
     {
       "src": "images/pizza.png",
       "type": "image/png",
+      "sizes": "100x100"
+    },
+    {
+      "src": "images/pizza192x192.png",
+      "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "images/pizza.png",
+      "src": "images/pizza512x512.png",
       "type": "image/png",
       "sizes": "512x512"
     }

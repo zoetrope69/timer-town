@@ -2,8 +2,23 @@
 <html lang="en">
 
 <head>
-  <title>Pizza Timer</title>
-  <meta name="Description" content="A timer for pair programming">
+  <title>Pizza Timer 🍕⏱️</title>
+  <meta name="title" content="Pizza Timer 🍕⏱️ | A timer for pair programming">
+  <meta name="description" content="A timer for pair programming">
+
+  <!-- open Graph / facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://timer.pizza/">
+  <meta property="og:title" content="Pizza Timer 🍕⏱️">
+  <meta property="og:description" content="A timer for pair programming">
+  <meta property="og:image" content="images/share-image.png">
+
+  <!-- twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://timer.pizza/">
+  <meta property="twitter:title" content="Pizza Timer 🍕⏱️">
+  <meta property="twitter:description" content="A timer for pair programming">
+  <meta property="twitter:image" content="images/share-image.png">
 
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -11,22 +26,23 @@
   <meta name="theme-color" content="#ffe0e0">
 
   <link rel="manifest" href="/site.manifest">
-
   <link rel="shortcut icon" href="images/pizza.png" type="image/x-icon" />
 
-  <link rel="stylesheet" type="text/css" href="style.css">
+  <link rel="preload" href="css/main.css" as="style">
+  <link rel="preload" href="js/bundle.js" as="script">
+
+  <link rel="stylesheet" type="text/css" href="css/main.css">
 
   <!-- development version, includes helpful console warnings -->
-  <!--   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> -->
+  <!-- <script src="js/vue.js"></script> -->
+  <!-- <script src="js/main.js"></script> -->
 
   <!-- production version, optimized for size and speed -->
-  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
-
-  <script src="client.js" defer></script>
+  <script src="js/bundle.js" defer></script>
 </head>
 
 <body>
-  <div id="app">
+  <div id="app" :class="{ 'color-scheme--dark': sharedState.colorScheme === 'dark', 'color-scheme--light': sharedState.colorScheme === 'light' }">
     <main class="main">
       <div
         class="faded"
@@ -39,7 +55,12 @@
       </div>
 
       <div class="timer">
-        {{ sharedState.timerRemainingTimeFormatted }}
+        <span v-cloak>
+          {{ sharedState.timerRemainingTimeFormatted }}
+        </span>
+        <span v-if="false" class="loading--invisible">
+          0s
+        </span>
 
         <loader
           :is-timer-running="sharedState.timerRunning"
@@ -52,7 +73,12 @@
         v-on:click="handleStartPauseTimerClick"
         class="button button--bigger button--primary"
       >
-        {{ sharedState.timerRunning ? 'Stop' : 'Start' }}
+        <span v-cloak>
+          {{ sharedState.timerRunning ? 'Stop' : 'Start' }}
+        </span>
+        <span v-if="false">
+          Start
+        </span>
       </button>
 
       <button
@@ -113,25 +139,25 @@
           class="input__select"
         >
           <option value="gong" :selected="sharedState.soundName === 'gong'">
-            <span aria-hidden="true">🍃</span> Gong
+            Gong <span aria-hidden="true">🍃</span>
           </option>
           <option value="bell" :selected="sharedState.soundName === 'bell'">
-            <span aria-hidden="true">🔔</span> Bell
+            Bell <span aria-hidden="true">🔔</span>
           </option>
           <option value="foghorn" :selected="sharedState.soundName === 'foghorn'">
-            <span aria-hidden="true">🚢</span> Foghorn
+            Foghorn <span aria-hidden="true">🚢</span>
           </option>
           <option value="music-box" :selected="sharedState.soundName === 'music-box'">
-            <span aria-hidden="true">🎶</span> Music Box
+            Music Box <span aria-hidden="true">🎶</span>
           </option>
           <option value="chief-chef" :selected="sharedState.soundName === 'chief-chef'">
-            <span aria-hidden="true">👨‍🍳</span> Chief Chef
+            Chief Chef <span aria-hidden="true">👨‍🍳</span>
           </option>
           <option value="marshall-house" :selected="sharedState.soundName === 'marshall-house'">
-            <span aria-hidden="true">🏠</span> Marshall House
+            Marshall House <span aria-hidden="true">🏠</span>
           </option>
           <option value="beano-yelp" :selected="sharedState.soundName === 'beano-yelp'">
-            <span aria-hidden="true">😱</span> Beano Yelp
+            Beano Yelp <span aria-hidden="true">😱</span>
           </option>
         </select>
       </div>
@@ -155,7 +181,7 @@
         :label="'Notifications'"
       >
       </toggle-button>
-      <p v-if="sharedState.notificationPermission === 'denied'" class="disabled-message">
+      <p v-if="sharedState.notificationPermission === 'denied'" class="message message--disabled">
         Notifications are blocked. You'll need to reallow them to handle notifications.
       </p>
 
@@ -166,6 +192,46 @@
       >
         Test push notification
       </button>
+
+      <h2>Dark mode</h2>
+
+      <p class="message">
+        Force it to be dark/light mode. Matches your default computer settings when set to 'Auto'.
+      </p>
+
+      <div class="input">
+        <label class="input__label" for="color-scheme-select">
+          Color scheme
+        </label>
+
+        <select
+          id="color-scheme-select"
+          v-on:change="handleColorSchemeSelectChange"
+          class="input__select"
+        >
+          <option value="auto" :selected="sharedState.colorScheme === 'auto'">
+            Auto <span aria-hidden="true">🌬️</span>
+          </option>
+          <option value="dark" :selected="sharedState.colorScheme === 'dark'">
+            Dark <span aria-hidden="true">🌚</span>
+          </option>
+          <option value="light" :selected="sharedState.colorScheme === 'light'">
+            Light <span aria-hidden="true">🌞</span>
+          </option>
+        </select>
+      </div>
+
+      <div v-cloak v-if="sharedState.colorScheme === 'auto'">
+        <p class="message" v-if="!sharedState.browserColorScheme">
+          No specific color scheme detected.
+        </p>
+        <p class="message" v-if="sharedState.browserColorScheme === 'dark'">
+          Dark mode color scheme detected.
+        </p>
+        <p class="message" v-if="sharedState.browserColorScheme === 'light'">
+          Light mode color scheme detected.
+        </p>
+      </div>
     </main>
 
     <footer class="footer">
