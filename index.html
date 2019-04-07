@@ -28,18 +28,18 @@
   <link rel="manifest" href="/site.manifest">
   <link rel="shortcut icon" href="images/pizza.png" type="image/x-icon" />
 
-  <link rel="preload" href="style.css" as="style">
-  <link rel="preload" href="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.min.js" as="script">
-  <link rel="preload" href="client.js" as="script">
+  <link rel="preload" href="css/main.css" as="style">
+  <link rel="preload" href="js/vue.min.js" as="script">
+  <link rel="preload" href="js/main.js" as="script">
 
-  <link rel="stylesheet" type="text/css" href="style.css">
+  <link rel="stylesheet" type="text/css" href="css/main.css">
 
   <!-- development version, includes helpful console warnings -->
-  <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script> -->
-
+  <!-- <script src="js/vue.js"></script> -->
   <!-- production version, optimized for size and speed -->
-  <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.min.js" defer></script>
-  <script src="client.js" defer></script>
+  <script src="js/vue.min.js" defer></script>
+
+  <script src="js/main.js" defer></script>
 </head>
 
 <body>
@@ -59,8 +59,8 @@
         <span v-cloak>
           {{ sharedState.timerRemainingTimeFormatted }}
         </span>
-        <span v-if="false">
-          10m 00s
+        <span v-if="false" class="loading--invisible">
+          0s
         </span>
 
         <loader

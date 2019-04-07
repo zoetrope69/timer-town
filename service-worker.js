@@ -1,11 +1,13 @@
-const version = "1.8.7";
+const version = "1.9.1";
 
 self.addEventListener("install", event => {
   event.waitUntil(
     caches.open(version + "fundamentals").then(cache => {
       return cache.addAll([
-        "/client.js",
-        "/index.html",
+        "/",
+        "/js/vue.min.js",
+        "/js/main.js",
+        "/css/main.css",
         "/images/pizza.png",
         "/sounds/beano-yelp.mp3",
         "/sounds/bell.mp3",
@@ -13,8 +15,7 @@ self.addEventListener("install", event => {
         "/sounds/foghorn.mp3",
         "/sounds/gong.mp3",
         "/sounds/music-box.mp3",
-        "/sounds/marshall-house.mp3",
-        "/style.css"
+        "/sounds/marshall-house.mp3"
       ]);
     })
   );

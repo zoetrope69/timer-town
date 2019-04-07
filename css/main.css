@@ -3,6 +3,10 @@
   display: none;
 }
 
+.loading--invisible {
+  visibility: hidden;
+}
+
 /* default for light mode */
 :root,
 .color-scheme--light {
