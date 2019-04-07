@@ -42,7 +42,12 @@
       </div>
 
       <div class="timer">
-        {{ sharedState.timerRemainingTimeFormatted }}
+        <span v-cloak>
+          {{ sharedState.timerRemainingTimeFormatted }}
+        </span>
+        <span v-if="false">
+          10m 00s
+        </span>
 
         <loader
           :is-timer-running="sharedState.timerRunning"
@@ -55,7 +60,12 @@
         v-on:click="handleStartPauseTimerClick"
         class="button button--bigger button--primary"
       >
-        {{ sharedState.timerRunning ? 'Stop' : 'Start' }}
+        <span v-cloak>
+          {{ sharedState.timerRunning ? 'Stop' : 'Start' }}
+        </span>
+        <span v-if="false">
+          Start
+        </span>
       </button>
 
       <button
@@ -198,7 +208,7 @@
         </select>
       </div>
 
-      <div v-if="sharedState.colorScheme === 'auto'">
+      <div v-cloak v-if="sharedState.colorScheme === 'auto'">
         <p class="message" v-if="!sharedState.browserColorScheme">
           No specific color scheme detected.
         </p>
