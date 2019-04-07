@@ -32,9 +32,10 @@ function setMetaThemeColor(colorScheme) {
 
   if (colorScheme === 'dark') {
     element.setAttribute('content', MENU_DARK_COLOR_SCHEME);
-  } else if (colorScheme === 'light') {
-    element.setAttribute('content', MENU_LIGHT_COLOR_SCHEME);
+    return;
   }
+  
+  element.setAttribute('content', MENU_LIGHT_COLOR_SCHEME);
 }
 
 function parseTimeStringPart(timeString, timeAmountString) {
@@ -395,7 +396,11 @@ function main() {
         window.localStorage.setItem("colorScheme", newValue);
       }
 
-      setMetaThemeColor(newValue);
+      if (newValue === 'auto') {
+        setMetaThemeColor(this.state.browserColorScheme);
+      } else {
+        setMetaThemeColor(newValue);
+      }
 
       this.state.colorScheme = newValue;
     }
