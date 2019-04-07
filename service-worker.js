@@ -1,12 +1,11 @@
-const version = "1.9.1";
+const version = "2.0.0";
 
 self.addEventListener("install", event => {
   event.waitUntil(
     caches.open(version + "fundamentals").then(cache => {
       return cache.addAll([
         "/",
-        "/js/vue.min.js",
-        "/js/main.js",
+        "/js/bundle.js",
         "/css/main.css",
         "/images/pizza.png",
         "/sounds/beano-yelp.mp3",
