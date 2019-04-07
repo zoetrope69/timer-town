@@ -111,10 +111,10 @@ function main() {
       if (this.debug) console.log("setTitle triggered");
 
       if (!title) {
-        document.title = "Pizza Timer";
+        document.title = "Pizza Timer 🍕⏱️ | A timer for pair programming";
       }
 
-      document.title = `${title} | Pizza Timer`;
+      document.title = `${title} | Pizza Timer 🍕⏱️`;
     },
 
     triggerEndOfTimer() {
