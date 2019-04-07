@@ -18,6 +18,25 @@ const SOUNDS = {
 
 const DEFAULT_MINUTES_AMOUNT = 10;
 
+const MEDIA_QUERY_DARK_COLOR_SCHEME = '(prefers-color-scheme: dark)';
+const MEDIA_QUERY_LIGHT_COLOR_SCHEME = '(prefers-color-scheme: light)';
+
+const MENU_DARK_COLOR_SCHEME = '#3d1e45';
+const MENU_LIGHT_COLOR_SCHEME = '#ffe0e0';
+
+function setMetaThemeColor(colorScheme) {
+  const element = document.querySelector("meta[name='theme-color']");
+  if (!element) {
+    return;
+  }
+
+  if (colorScheme === 'dark') {
+    element.setAttribute('content', MENU_DARK_COLOR_SCHEME);
+  } else if (colorScheme === 'light') {
+    element.setAttribute('content', MENU_LIGHT_COLOR_SCHEME);
+  }
+}
+
 function parseTimeStringPart(timeString, timeAmountString) {
   if (timeString === "00") {
     return `${timeString}${timeAmountString} `;
@@ -81,7 +100,10 @@ function main() {
       ),
       timerProgressPercentage: 0,
       timerIntervalSeconds: 1,
-      timerRepeatAtEndEnabled: false
+      timerRepeatAtEndEnabled: false,
+
+      browserColorScheme: null,
+      colorScheme: 'auto'
     },
 
     setTitle(title) {
@@ -353,6 +375,29 @@ function main() {
           });
         });
       });
+    },
+
+    setBrowserColorScheme(newValue) {
+      if (this.debug) console.log("setBrowserColorScheme triggered with", newValue);
+
+      // if auto set meta color
+      if (this.state.colorScheme === 'auto') {
+        setMetaThemeColor(newValue);
+      }
+
+      this.state.browserColorScheme = newValue;
+    },
+
+    setColorScheme(newValue) {
+      if (this.debug) console.log("setColorScheme triggered with", newValue);
+
+      if ("localStorage" in window) {
+        window.localStorage.setItem("colorScheme", newValue);
+      }
+
+      setMetaThemeColor(newValue);
+
+      this.state.colorScheme = newValue;
     }
   };
 
@@ -394,6 +439,38 @@ function main() {
       false
     );
   }
+
+  // detect color schemes dark/light
+  function detectColorScheme() {
+    if (!window.matchMedia) {
+      return;
+    }
+
+    function colorSchemeMediaQueryListener({ matches, media }) {
+      if (!matches) {
+        return;
+      }
+
+      if (media === MEDIA_QUERY_DARK_COLOR_SCHEME) {
+        store.setBrowserColorScheme('dark');
+      } else if (media === MEDIA_QUERY_LIGHT_COLOR_SCHEME) {
+        store.setBrowserColorScheme('light');
+      }
+    }
+
+    const mediaQueryDark = window.matchMedia(MEDIA_QUERY_DARK_COLOR_SCHEME);
+    const mediaQueryLight = window.matchMedia(MEDIA_QUERY_LIGHT_COLOR_SCHEME);
+    
+    mediaQueryDark.addListener(colorSchemeMediaQueryListener);
+    mediaQueryLight.addListener(colorSchemeMediaQueryListener);
+
+    if (mediaQueryDark.matches) {
+      store.setBrowserColorScheme('dark');
+    } else if (mediaQueryLight.matches) {
+      store.setBrowserColorScheme('light');
+    }
+  }
+  detectColorScheme();
 
   Vue.component("toggle-button", {
     props: ["id", "onClick", "isActive", "label"],
@@ -499,6 +576,13 @@ function main() {
     if (timerEndTimeMinutes !== null) {
       store.setTimerEndTime(JSON.parse(timerEndTimeMinutes) * 60);
     }
+
+    const colorScheme = window.localStorage.getItem(
+      "colorScheme"
+    );
+    if (colorScheme !== null) {
+      store.setColorScheme(colorScheme);
+    }
   }
 
   const app = new Vue({
@@ -576,6 +660,11 @@ function main() {
         store.setTimerRepeatAtEndEnabled(
           !this.sharedState.timerRepeatAtEndEnabled
         );
+      },
+
+      handleColorSchemeSelectChange: function(e) {
+        const newValue = e.target.value;
+        store.setColorScheme(newValue);
       },
 
       handleClearDataClick: function() {

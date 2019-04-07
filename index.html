@@ -26,7 +26,7 @@
 </head>
 
 <body>
-  <div id="app">
+  <div id="app" :class="{ 'color-scheme--dark': sharedState.colorScheme === 'dark', 'color-scheme--light': sharedState.colorScheme === 'light' }">
     <main class="main">
       <div
         class="faded"
@@ -155,7 +155,7 @@
         :label="'Notifications'"
       >
       </toggle-button>
-      <p v-if="sharedState.notificationPermission === 'denied'" class="disabled-message">
+      <p v-if="sharedState.notificationPermission === 'denied'" class="message message--disabled">
         Notifications are blocked. You'll need to reallow them to handle notifications.
       </p>
 
@@ -166,6 +166,46 @@
       >
         Test push notification
       </button>
+
+      <h2>Dark mode</h2>
+
+      <p class="message">
+        Force it to be dark/light mode. Matches your default computer settings when set to 'Auto'.
+      </p>
+
+      <div class="input">
+        <label class="input__label" for="color-scheme-select">
+          Color scheme
+        </label>
+
+        <select
+          id="color-scheme-select"
+          v-on:change="handleColorSchemeSelectChange"
+          class="input__select"
+        >
+          <option value="auto" :selected="sharedState.colorScheme === 'auto'">
+            Auto <span aria-hidden="true">🌬️</span>
+          </option>
+          <option value="dark" :selected="sharedState.colorScheme === 'dark'">
+            Dark <span aria-hidden="true">🌚</span>
+          </option>
+          <option value="light" :selected="sharedState.colorScheme === 'light'">
+            Light <span aria-hidden="true">🌞</span>
+          </option>
+        </select>
+      </div>
+
+      <div v-if="sharedState.colorScheme === 'auto'">
+        <p class="message" v-if="!sharedState.browserColorScheme">
+          No specific color scheme detected.
+        </p>
+        <p class="message" v-if="sharedState.browserColorScheme === 'dark'">
+          Dark mode color scheme detected.
+        </p>
+        <p class="message" v-if="sharedState.browserColorScheme === 'light'">
+          Light mode color scheme detected.
+        </p>
+      </div>
     </main>
 
     <footer class="footer">
