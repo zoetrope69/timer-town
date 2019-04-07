@@ -522,7 +522,7 @@ function main() {
       >
         <img
           class="loader__image"
-          :src="IMAGES.pizza"
+          src="${IMAGES.pizza}"
           role="presentation"
         />
         <div
