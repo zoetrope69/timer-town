@@ -2,9 +2,20 @@
 
 A timer for pair programming
 
-
-## JavaScript minification
+## Installation
 
 ```bash
-npx terser --compress --mangle -o js/bundle.js -- js/main.js js/vue.min.js
+npm install
 ```
+
+## Running
+
+For running development and a production like server. (Add `NODE_ENV=production`)
+
+```bash
+npm start
+```
+
+## Deploying
+
+Deployed from master via Netlify. There are also pull request builds available.

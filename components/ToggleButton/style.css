@@ -1,0 +1,51 @@
+.toggle {
+  margin-bottom: 1em;
+  display: flex;
+  align-items: center;
+}
+
+.toggle__button {
+  position: relative;
+  display: flex;
+  width: 100px;
+  padding: 0.5em 1em;
+  padding-left: 2.5em;
+  margin-right: 1em;
+  align-items: center;
+  justify-content: flex-end;
+
+  font-weight: 700;
+
+  border-radius: 50px;
+  border: 3px solid var(--color-input-secondary);
+  background: var(--color-background);
+
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+}
+
+.toggle__button:hover {
+  opacity: 0.95;
+}
+
+.toggle__button--active {
+  padding-left: 1em;
+  padding-right: 2.5em;
+  justify-content: flex-start;
+  background: var(--color-input-secondary);
+}
+
+.toggle__button::before {
+  content: "";
+  position: absolute;
+  left: 5px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--color-body-text);
+  transition: left 0.1s ease-out;
+}
+
+.toggle__button--active::before {
+  left: calc(100% - 30px - 5px);
+}

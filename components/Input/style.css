@@ -1,0 +1,24 @@
+.input {
+  margin-bottom: 1em;
+}
+
+.input__label {
+  display: block;
+  margin-bottom: 0.5em;
+}
+
+.input__field,
+.input__select {
+  padding: 0.5em 0.75em;
+  font-size: 1.25em;
+  background: var(--color-background);
+  border: 3px solid var(--color-body-text);
+}
+
+.input__field:disabled,
+.input__select:disabled {
+  background: var(--color-input-disabled);
+  border-color: var(--color-input-disabled);
+  color: var(--color-background);
+  cursor: initial;
+}

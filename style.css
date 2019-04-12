@@ -1,0 +1,121 @@
+/* default for light mode */
+:root,
+.color-scheme--light {
+  --color-background: #fff;
+  --color-background-accent: #ffe0e0;
+  --color-background-footer: #f3f3f3;
+
+  --color-body-text: #202040;
+  --color-body-text-errored: #570d0d;
+
+  --color-title: #532323;
+  --color-sub-title: #675252;
+
+  --color-focus-highlight: rgba(0, 0, 255, 0.5);
+
+  --color-input-primary: #00823b;
+  --color-input-secondary: #ffcc66;
+  --color-input-disabled: #d3d3d3;
+}
+
+.color-scheme--dark {
+  --color-background: #1c082a;
+  --color-background-accent: #3d1e45;
+  --color-background-footer: #320030;
+
+  --color-body-text: #ffcc66;
+  --color-body-text-errored: #ffbcbc;
+
+  --color-title: #ff86d8;
+  --color-sub-title: #d15ba8;
+
+  --color-focus-highlight: rgba(253, 152, 255, 0.75);
+
+  --color-input-primary: #27d4bc;
+  --color-input-secondary: #383844;
+  --color-input-disabled: #d3d3d3;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-background: #1c082a;
+    --color-background-accent: #3d1e45;
+    --color-background-footer: #320030;
+
+    --color-body-text: #ffcc66;
+    --color-body-text-errored: #ffbcbc;
+
+    --color-title: #ff86d8;
+    --color-sub-title: #d15ba8;
+
+    --color-focus-highlight: rgba(253, 152, 255, 0.75);
+
+    --color-input-primary: #27d4bc;
+    --color-input-secondary: #383844;
+    --color-input-disabled: #d3d3d3;
+  }
+}
+
+*::before,
+*,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+*:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--color-focus-highlight);
+}
+
+body {
+  font-family: sans-serif;
+  font-size: 18px;
+}
+
+#app {
+  min-height: 100vh;
+  color: var(--color-body-text);
+  background: var(--color-background);
+  border-top: 10px solid var(--color-background-accent);
+}
+
+input,
+select,
+button {
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (min-width: 600px) {
+  body {
+    font-size: 19px;
+  }
+
+  #app {
+    border: none;
+    background-image: linear-gradient(15deg,
+      var(--color-background),
+      var(--color-background) 95%,
+      var(--color-background-accent) 95%,
+      var(--color-background-accent));
+  }
+}
+
+@media (min-width: 900px) {
+  body {
+    font-size: 20px;
+  }
+
+  #app {
+    background-image: linear-gradient(110deg,
+      var(--color-background),
+      var(--color-background) 60%,
+      var(--color-background-accent) 60%,
+      var(--color-background-accent));
+  }
+}

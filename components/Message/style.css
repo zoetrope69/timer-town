@@ -1,0 +1,10 @@
+.message {
+  margin-top: -0.05em;
+  margin-bottom: 1em;
+
+  font-size: 0.85em;
+}
+
+.message--errored {
+  color: var(--color-body-text-errored);
+}

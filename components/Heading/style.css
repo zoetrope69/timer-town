@@ -1,0 +1,26 @@
+.timer {
+  display: block;
+  margin: 0.5em 0;
+  font-weight: 700;
+  font-size: 4em;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+@media (min-width: 600px) {
+  .timer {
+    margin: 0.25em 0;
+    font-size: 6em;
+  }
+}
+
+@media (min-width: 900px) {
+  .timer {
+    margin: 0;
+    font-size: 10em;
+  }
+}
+.heading {
+  margin-top: 1.75em;
+  margin-bottom: 0.75em;
+}
