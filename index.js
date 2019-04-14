@@ -499,12 +499,9 @@ class App extends Component {
       return;
     }
 
-    console.log('hi service worker')
-
     navigator.serviceWorker.register('service-worker.js');
 
     navigator.serviceWorker.addEventListener("message", event => {
-      console.log('message', event)
       const { data } = event;
 
       const dontDoAnthing = data.close || data.dataSentToNotification.test; // test notification
@@ -617,8 +614,9 @@ class App extends Component {
       return;
     }
     
+    this.setTimerCurrentTime(0);
+    this.setTimerPaused(false);
     this.setTimerRunning(false);
-    this.setTimerPaused(true);
   }
 
   handleTimerRepeatAtEndEnabledClick() {
