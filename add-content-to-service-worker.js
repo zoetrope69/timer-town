@@ -32,17 +32,16 @@ const FILE_PATHS = `[
   ${injectedFilePathsString}
 ]`.trim();
 
-Promise.all([
-  replaceInFile({
-    files: 'build/service-worker.js',
-    from: 'const VERSION = "development";',
-    to: `const VERSION = ${VERSION};`
-  }),
-  replaceInFile({
+replaceInFile({
+  files: 'build/service-worker.js',
+  from: 'const VERSION = "development";',
+  to: `const VERSION = ${VERSION};`
+}).then(() => {
+  return replaceInFile({
     files: 'build/service-worker.js',
     from: 'const FILE_PATHS = [];',
     to: `const FILE_PATHS = ${FILE_PATHS};`
   })
-]).catch(error => {
+}).catch(error => {
   console.error('Something went wrong adding variables to service-worker.js', error);
 });
