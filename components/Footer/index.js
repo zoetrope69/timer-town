@@ -62,22 +62,41 @@ const FooterLinks = () => (
   </div>
 );
 
-const Footer = ({ handleClearDataClick }) => (
-  <footer class={styles.footer}>
-    <Heading>
-      Data
-    </Heading>
+import { Component } from "preact";
 
-    <Button onClick={handleClearDataClick} isTertiary>
-      Clear data
-    </Button>
+class Footer extends Component {
+  handleShareClick() {
+    const supportsShare = "share" in navigator;
+    if (!supportsShare) {
+      return;
+    }
 
-    <Heading>
-      Credits
-    </Heading>
+    navigator.share({ url: 'https://timer.pizza' });
+  }
 
-    <FooterLinks />
-  </footer>
-);
+  render({ handleClearDataClick }) {
+    const supportsShare = "share" in navigator;
+
+    return (
+      <footer class={styles.footer}>
+        {supportsShare && (
+          <Button onClick={this.handleShareClick} isTertiary>
+            Share...
+          </Button>
+        )}
+
+        <Button onClick={handleClearDataClick} isTertiary>
+          Clear data
+        </Button>
+
+        <Heading>
+          Credits
+        </Heading>
+
+        <FooterLinks />
+      </footer>
+    );
+  }
+}
 
 export default Footer;

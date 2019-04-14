@@ -1,5 +1,5 @@
 .button {
-  margin-right: 0.75em;
+  display: block;
   margin-bottom: 0.75em;
   padding: 0.5em 1em;
 
@@ -16,10 +16,14 @@
 }
 
 .button--bigger {
-  margin-right: 0.5em;
+  display: inline-block;
   padding: 0.65em 1em;
   font-size: 1.75em;
   border-width: 4px;
+}
+
+.button--bigger:first-of-type {
+  margin-right: 0.5em;
 }
 
 .button--primary {
