@@ -186,6 +186,10 @@ class App extends Component {
   }
 
   initNotificationsPermissions() {
+    if (IS_SERVER_SIDE_BUILD) {
+      return;
+    }
+    
     this.handleNotificationPermission(Notification.permission);
   }
 
