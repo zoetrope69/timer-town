@@ -1,11 +1,13 @@
 {
   "private": true,
   "name": "pizza-timer",
-  "version": "0.0.0",
+  "version": "3.0.0",
   "license": "MIT",
   "scripts": {
     "start": "if-env NODE_ENV=production && npm run -s serve || npm run -s dev",
-    "build": "preact build --clean",
+    "build": "preact build --no-service-worker --clean --json",
+    "postbuild": "npm run handle-service-worker",
+    "handle-service-worker": "mv stats.json build/stats.json && cp service-worker.js build/service-worker.js && node add-content-to-service-worker.js",
     "serve": "npm run build && preact serve",
     "dev": "preact watch",
     "lint": "eslint src"
@@ -19,7 +21,7 @@
     "eslint-plugin-react": "^7.7.0",
     "if-env": "^1.0.0",
     "preact-cli": "^2.0.0",
-    "preact-cli-workbox-plugin": "github:zaccolley/preact-cli-workbox-plugin",
+    "prepend-file": "^1.3.1",
     "prettier": "1.17.0"
   },
   "dependencies": {

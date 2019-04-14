@@ -1,19 +1,65 @@
-// uses workbox for precaching and installing
+// INJECTED_VERSION and INJECTED_FILE_PATHS get added in here when running `npm run build`
 
-workbox.routing.registerRoute(
-  '/',
-  new workbox.strategies.CacheFirst()
-);
+const version = INJECTED_VERSION;
 
-self.__precacheManifest.forEach(item => {
-  workbox.routing.registerRoute(
-    item.url,
-    new workbox.strategies.CacheFirst()
+self.addEventListener("install", event => {
+  event.waitUntil(
+    caches.open(version + "fundamentals").then(cache => {
+      return cache.addAll(INJECTED_FILE_PATHS);
+    })
   );
-})
+});
 
-self.addEventListener('activate', event => {
-  event.waitUntil(clients.claim());
+self.addEventListener("fetch", event => {
+  if (event.request.method !== "GET") {
+    return;
+  }
+
+  event.respondWith(
+    caches.match(event.request).then(cached => {
+      var networked = fetch(event.request)
+        .then(fetchedFromNetwork, unableToResolve)
+        .catch(unableToResolve);
+
+      return cached || networked;
+
+      function fetchedFromNetwork(response) {
+        var cacheCopy = response.clone();
+
+        caches.open(version + "pages").then(function add(cache) {
+          cache.put(event.request, cacheCopy);
+        });
+
+        return response;
+      }
+
+      function unableToResolve() {
+        return new Response("<h1>Service Unavailable</h1>", {
+          status: 503,
+          statusText: "Service Unavailable",
+          headers: new Headers({
+            "Content-Type": "text/html"
+          })
+        });
+      }
+    })
+  );
+});
+
+self.addEventListener("activate", event => {
+  event.waitUntil(
+    caches.keys().then(keys => {
+      return Promise.all(
+        keys
+        .filter(key => {
+          return !key.startsWith(version);
+        })
+        .map(key => {
+          return caches.delete(key);
+        })
+      );
+    })
+  );
 });
 
 function sendMessageToClient(event, obj) {

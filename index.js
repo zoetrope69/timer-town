@@ -503,6 +503,8 @@ class App extends Component {
       return;
     }
 
+    navigator.serviceWorker.register('service-worker.js');
+
     navigator.serviceWorker.addEventListener("message", event => {
       const { data } = event;
 
