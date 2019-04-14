@@ -48,6 +48,8 @@ self.addEventListener("fetch", event => {
 });
 
 self.addEventListener("activate", event => {
+  event.waitUntil(clients.claim());
+
   event.waitUntil(
     caches.keys().then(keys => {
       return Promise.all(

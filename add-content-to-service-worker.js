@@ -29,8 +29,8 @@ const injectedFilePathsString = generatedFilePaths.concat(STATIC_PATHS)
 
 const VERSION = `"${packageJson.version}"`;
 const FILE_PATHS = `[
-  ${injectedFilePathsString}
-]`.trim();
+${injectedFilePathsString}
+]`;
 
 replaceInFile({
   files: 'build/service-worker.js',

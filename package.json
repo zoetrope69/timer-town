@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "pizza-timer",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "license": "MIT",
   "scripts": {
     "start": "if-env NODE_ENV=production && npm run -s serve || npm run -s dev",
