@@ -7,7 +7,8 @@ const Input = ({
   options,
   value,
   disabled,
-  onChange 
+  onChange,
+  onFocus
 }) => (
   <div class={styles.input}>
     <label class={styles["input__label"]} for={id}>
@@ -23,6 +24,7 @@ const Input = ({
         step="1"
         disabled={disabled}
         onChange={onChange}
+        onFocus={onFocus}
         value={value}
       />
     )}

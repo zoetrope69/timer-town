@@ -86,6 +86,9 @@ class App extends Component {
     this.handleTimerEndTimeMinutesChange = this.handleTimerEndTimeMinutesChange.bind(
       this
     );
+    this.handleTimerEndTimeMinutesFocus = this.handleTimerEndTimeMinutesFocus.bind(
+      this
+    );
     this.handleResetTimerClick = this.handleResetTimerClick.bind(this);
     this.handleAudioSelectChange = this.handleAudioSelectChange.bind(this);
     this.handleTimerRepeatAtEndEnabledClick = this.handleTimerRepeatAtEndEnabledClick.bind(
@@ -593,7 +596,17 @@ class App extends Component {
 
   handleTimerEndTimeMinutesChange(e) {
     const newValue = e.target.value;
-    this.setTimerEndTime(newValue * 60);
+    const newEndTime = Math.max(0.1, newValue);
+    this.setTimerEndTime(newEndTime * 60);
+  }
+
+  handleTimerEndTimeMinutesFocus() {
+    if (!this.state.timerRunning) {
+      return;
+    }
+    
+    this.setTimerRunning(false);
+    this.setTimerPaused(true);
   }
 
   handleTimerRepeatAtEndEnabledClick() {
@@ -674,6 +687,7 @@ class App extends Component {
             label="Timer end time (minutes)"
             value={timerEndTimeMinutes}
             onChange={this.handleTimerEndTimeMinutesChange}
+            onFocus={this.handleTimerEndTimeMinutesFocus}
           />
 
           <ToggleButton
