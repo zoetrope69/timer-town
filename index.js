@@ -136,7 +136,6 @@ class App extends Component {
 
     this.setTitle();
     this.initSettingsFromLocalStorage();
-    this.initNotificationsPermissions();
     this.initAudio();
     this.handleNotificationClickMessages();
   }
@@ -164,6 +163,8 @@ class App extends Component {
     if (notificationsEnabled !== null) {
       this.setNotificationsEnabled(JSON.parse(notificationsEnabled));
     }
+    // check if notificaions are blocked after getting local copy
+    this.initNotificationsPermissions();
 
     const timerRepeatAtEndEnabled = window.localStorage.getItem(
       "timerRepeatAtEndEnabled"
