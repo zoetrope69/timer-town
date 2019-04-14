@@ -1,11 +1,12 @@
-// INJECTED_VERSION and INJECTED_FILE_PATHS get added in here when running `npm run build`
+// actual VERSION and FILE_PATHS get replaced in here when running `npm run build`
 
-const version = INJECTED_VERSION;
+const VERSION = "development";
+const FILE_PATHS = [];
 
 self.addEventListener("install", event => {
   event.waitUntil(
-    caches.open(version + "fundamentals").then(cache => {
-      return cache.addAll(INJECTED_FILE_PATHS);
+    caches.open(VERSION + "fundamentals").then(cache => {
+      return cache.addAll(FILE_PATHS);
     })
   );
 });
@@ -26,7 +27,7 @@ self.addEventListener("fetch", event => {
       function fetchedFromNetwork(response) {
         var cacheCopy = response.clone();
 
-        caches.open(version + "pages").then(function add(cache) {
+        caches.open(VERSION + "pages").then(function add(cache) {
           cache.put(event.request, cacheCopy);
         });
 
@@ -52,7 +53,7 @@ self.addEventListener("activate", event => {
       return Promise.all(
         keys
         .filter(key => {
-          return !key.startsWith(version);
+          return !key.startsWith(VERSION);
         })
         .map(key => {
           return caches.delete(key);
@@ -64,7 +65,9 @@ self.addEventListener("activate", event => {
 
 function sendMessageToClient(event, obj) {
   self.clients.matchAll().then(clients => {
+    console.log('clients', clients)
     clients.forEach(client => {
+      console.log(event.notification.data.url, client.url)
       if (event.notification.data.url !== client.url) {
         return;
       }
