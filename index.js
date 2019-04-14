@@ -662,12 +662,6 @@ class App extends Component {
       >
         <Main>
           <Header faded={timerRunning} />
-
-          <noscript>
-            <Message isErrored>
-              JavaScript is disabled. This won't work.
-            </Message>
-          </noscript>
           
           <Timer>
             {timerRemainingTimeFormatted}
