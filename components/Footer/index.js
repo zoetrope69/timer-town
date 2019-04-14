@@ -1,6 +1,7 @@
 import { Component } from "preact";
 import {
   IS_SERVER_SIDE_BUILD,
+  LOCALSTORAGE_AVAILABLE,
   META_URL
 } from '../../helpers';
 import Button from '../Button';
@@ -71,7 +72,27 @@ class Footer extends Component {
   constructor(props) {
     super(props);
 
+    this.handleClearDataClick = this.handleClearDataClick.bind(this);
     this.handleShareClick = this.handleShareClick.bind(this);
+  }
+
+  handleClearDataClick() {
+    if (IS_SERVER_SIDE_BUILD) {
+      return;
+    }
+
+    if (LOCALSTORAGE_AVAILABLE) {
+      window.localStorage.clear();
+    }
+
+    navigator.serviceWorker.getRegistrations().then(registrations => {
+      for (let registration of registrations) {
+        registration.unregister()
+      }
+      
+      // refresh window
+      window.location = window.location;
+    });
   }
 
   getSupportsShare() {
@@ -87,19 +108,29 @@ class Footer extends Component {
     navigator.share({ url: META_URL });
   }
 
-  render({ handleClearDataClick }) {
+  render() {
     const supportsShare = this.getSupportsShare();
 
     return (
       <footer class={styles.footer}>
         {supportsShare && (
-          <Button onClick={this.handleShareClick} isTertiary>
-            Share...
-          </Button>
+          <div>
+            <Heading>
+              Share
+            </Heading>
+
+            <Button onClick={this.handleShareClick} isTertiary>
+              Share with others&hellip; <span aria-hidden="true">❤️</span>
+            </Button>
+          </div>
         )}
 
-        <Button onClick={handleClearDataClick} isTertiary>
-          Clear data
+        <Heading>
+          Data
+        </Heading>
+
+        <Button onClick={this.handleClearDataClick} isTertiary>
+          Clear settings and data&hellip; <span aria-hidden="true">🗑️</span>
         </Button>
 
         <Heading>

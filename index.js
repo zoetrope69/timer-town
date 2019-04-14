@@ -102,7 +102,6 @@ class App extends Component {
     this.handleColorSchemeSelectChange = this.handleColorSchemeSelectChange.bind(
       this
     );
-    this.handleClearDataClick = this.handleClearDataClick.bind(this);
 
     handleTabInBackground(inBackground => {
       if (!this.timerRunning) {
@@ -631,13 +630,6 @@ class App extends Component {
     this.setColorScheme(newValue);
   }
 
-  handleClearDataClick() {
-    if (LOCALSTORAGE_AVAILABLE) {
-      window.localStorage.clear();
-    }
-    window.location = window.location;
-  }
-
   render(props, state) {
     const {
       audioEnabled,
@@ -805,7 +797,7 @@ class App extends Component {
           )}
         </Main>
 
-        <Footer handleClearDataClick={this.handleClearDataClick} />
+        <Footer />
       </div>
     );
   }
