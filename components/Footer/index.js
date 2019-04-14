@@ -68,6 +68,12 @@ const FooterLinks = () => (
 );
 
 class Footer extends Component {
+  constructor(props) {
+    super(props);
+
+    this.handleShareClick = this.handleShareClick.bind(this);
+  }
+
   getSupportsShare() {
     return !IS_SERVER_SIDE_BUILD && "share" in navigator;
   }
