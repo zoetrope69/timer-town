@@ -6,7 +6,14 @@ import {
   detectColorScheme,
   formatTimeFromSeconds,
   handleTabInBackground,
-  setMetaThemeColor
+  setMetaThemeColor,
+
+  IS_SERVER_SIDE_BUILD,
+  LOCALSTORAGE_AVAILABLE,
+  META_URL,
+  META_TITLE,
+  META_DESCRIPTION,
+  META_SHARE_IMAGE
 } from "./helpers";
 import {
   Button,
@@ -23,12 +30,7 @@ import {
 
 import "./style";
 
-const IS_SERVER_SIDE_BUILD = typeof window === "undefined";
-const LOCALSTORAGE_AVAILABLE =
-  !IS_SERVER_SIDE_BUILD && "localStorage" in window;
-
 const PIZZA_IMAGE = "assets/images/pizza.png";
-
 const SOUNDS = {
   gong: "assets/sounds/gong.mp3",
   bell: "assets/sounds/bell.mp3",
@@ -40,11 +42,6 @@ const SOUNDS = {
 };
 
 const DEFAULT_MINUTES_AMOUNT = 10;
-
-const META_URL = "https://timer.pizza/";
-const META_TITLE = "Pizza Timer 🍕⏱️";
-const META_DESCRIPTION = "A timer for pair programming";
-const META_SHARE_IMAGE = "assets/images/share-image.png";
 
 class App extends Component {
   constructor(props) {

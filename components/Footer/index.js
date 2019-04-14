@@ -1,3 +1,8 @@
+import { Component } from "preact";
+import {
+  IS_SERVER_SIDE_BUILD,
+  META_URL
+} from '../../helpers';
 import Button from '../Button';
 import Heading from '../Heading';
 
@@ -62,20 +67,22 @@ const FooterLinks = () => (
   </div>
 );
 
-import { Component } from "preact";
-
 class Footer extends Component {
+  getSupportsShare() {
+    return !IS_SERVER_SIDE_BUILD && "share" in navigator;
+  }
+
   handleShareClick() {
-    const supportsShare = "share" in navigator;
+    const supportsShare = this.getSupportsShare();
     if (!supportsShare) {
       return;
     }
 
-    navigator.share({ url: 'https://timer.pizza' });
+    navigator.share({ url: META_URL });
   }
 
   render({ handleClearDataClick }) {
-    const supportsShare = "share" in navigator;
+    const supportsShare = this.getSupportsShare();
 
     return (
       <footer class={styles.footer}>

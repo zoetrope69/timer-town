@@ -4,6 +4,15 @@ const MEDIA_QUERY_LIGHT_COLOR_SCHEME = "(prefers-color-scheme: light)";
 const MENU_DARK_COLOR_SCHEME = "#3d1e45";
 const MENU_LIGHT_COLOR_SCHEME = "#ffe0e0";
 
+export const IS_SERVER_SIDE_BUILD = typeof window === "undefined";
+export const LOCALSTORAGE_AVAILABLE =
+  !IS_SERVER_SIDE_BUILD && "localStorage" in window;
+
+export const META_URL = "https://timer.pizza/";
+export const META_TITLE = "Pizza Timer 🍕⏱️";
+export const META_DESCRIPTION = "A timer for pair programming";
+export const META_SHARE_IMAGE = "assets/images/share-image.png";
+
 const hasOwn = {}.hasOwnProperty;
 export function classNames(obj) {
   const classes = [];
