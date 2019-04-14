@@ -58,7 +58,7 @@ class App extends Component {
       audioPlaying: false,
       audioEnabled: false,
 
-      notificationPermission: "",
+      notificationPermission: null,
       notificationsEnabled: false,
       notificationsDurationSeconds: 1,
 
@@ -140,6 +140,7 @@ class App extends Component {
 
     this.setTitle();
     this.initSettingsFromLocalStorage();
+    this.initNotificationsPermissions();
     this.initAudio();
     this.handleNotificationClickMessages();
   }
@@ -186,6 +187,16 @@ class App extends Component {
     if (colorScheme !== null) {
       this.setColorScheme(colorScheme);
     }
+  }
+
+  initNotificationsPermissions() {
+    const { notificationPermission } = this.state;
+
+    if (!notificationPermission || notificationPermission === Notification.permission) {
+      return;
+    }
+
+    this.handleNotificationPermission(Notification.permission);
   }
 
   setTitle(title) {
@@ -747,6 +758,7 @@ class App extends Component {
             onClick={this.handleToggleNotificationsClick}
             isActive={notificationsEnabled}
             label="Notifications"
+            disabled={notificationPermission === "denied"}
           />
 
           {notificationPermission === "denied" && (

@@ -2,6 +2,11 @@
   margin-bottom: 1em;
   display: flex;
   align-items: center;
+  cursor: pointer;
+}
+
+.toggle--disabled {
+  cursor: default;
 }
 
 .toggle__button {
@@ -24,8 +29,10 @@
   transition: all 0.1s ease-in-out;
 }
 
-.toggle__button:hover {
-  opacity: 0.95;
+.toggle--disabled .toggle__button {
+  background: var(--color-input-disabled);
+  border-color: var(--color-input-disabled);
+  cursor: default;
 }
 
 .toggle__button--active {
