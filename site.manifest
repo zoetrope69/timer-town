@@ -1,21 +1,11 @@
 {
   "short_name": "Timer",
-  "name": "Pizza Timer",
+  "name": "Timer Town",
   "icons": [
     {
-      "src": "images/pizza.png",
+      "src": "images/timer.png",
       "type": "image/png",
-      "sizes": "100x100"
-    },
-    {
-      "src": "images/pizza192x192.png",
-      "type": "image/png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "images/pizza512x512.png",
-      "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "240x240"
     }
   ],
   "start_url": ".",
