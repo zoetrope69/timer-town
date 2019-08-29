@@ -111,10 +111,10 @@ function main() {
       if (this.debug) console.log("setTitle triggered");
 
       if (!title) {
-        document.title = "Time Town ⏱🏡 | A timer for pair programming";
+        document.title = "Timer Town ⏱🏡 | A timer for pair programming";
       }
 
-      document.title = `${title} | Time Town ⏱🏡`;
+      document.title = `${title} | Timer Town ⏱🏡`;
     },
 
     triggerEndOfTimer() {
