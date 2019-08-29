@@ -3,26 +3,26 @@ const DEBUG = false;
 // See footer for credits for images and sounds
 
 const IMAGES = {
-  pizza: "images/pizza.png"
+  timer: "images/timer.png"
 };
 
 const SOUNDS = {
-  'gong': "sounds/gong.mp3",
-  'bell': "sounds/bell.mp3",
-  'foghorn': "sounds/foghorn.mp3",
-  'music-box': "sounds/music-box.mp3",
-  'chief-chef': "sounds/chief-chef.mp3",
-  'marshall-house': "sounds/marshall-house.mp3",
-  'beano-yelp': "sounds/beano-yelp.mp3"
+  gong: "sounds/gong.mp3",
+  bell: "sounds/bell.mp3",
+  foghorn: "sounds/foghorn.mp3",
+  "music-box": "sounds/music-box.mp3",
+  "chief-chef": "sounds/chief-chef.mp3",
+  "marshall-house": "sounds/marshall-house.mp3",
+  "beano-yelp": "sounds/beano-yelp.mp3"
 };
 
 const DEFAULT_MINUTES_AMOUNT = 10;
 
-const MEDIA_QUERY_DARK_COLOR_SCHEME = '(prefers-color-scheme: dark)';
-const MEDIA_QUERY_LIGHT_COLOR_SCHEME = '(prefers-color-scheme: light)';
+const MEDIA_QUERY_DARK_COLOR_SCHEME = "(prefers-color-scheme: dark)";
+const MEDIA_QUERY_LIGHT_COLOR_SCHEME = "(prefers-color-scheme: light)";
 
-const MENU_DARK_COLOR_SCHEME = '#3d1e45';
-const MENU_LIGHT_COLOR_SCHEME = '#ffe0e0';
+const MENU_DARK_COLOR_SCHEME = "#3d1e45";
+const MENU_LIGHT_COLOR_SCHEME = "#ffe0e0";
 
 function setMetaThemeColor(colorScheme) {
   const element = document.querySelector("meta[name='theme-color']");
@@ -30,12 +30,12 @@ function setMetaThemeColor(colorScheme) {
     return;
   }
 
-  if (colorScheme === 'dark') {
-    element.setAttribute('content', MENU_DARK_COLOR_SCHEME);
+  if (colorScheme === "dark") {
+    element.setAttribute("content", MENU_DARK_COLOR_SCHEME);
     return;
   }
-  
-  element.setAttribute('content', MENU_LIGHT_COLOR_SCHEME);
+
+  element.setAttribute("content", MENU_LIGHT_COLOR_SCHEME);
 }
 
 function parseTimeStringPart(timeString, timeAmountString) {
@@ -104,17 +104,17 @@ function main() {
       timerRepeatAtEndEnabled: false,
 
       browserColorScheme: null,
-      colorScheme: 'auto'
+      colorScheme: "auto"
     },
 
     setTitle(title) {
       if (this.debug) console.log("setTitle triggered");
 
       if (!title) {
-        document.title = "Pizza Timer 🍕⏱️ | A timer for pair programming";
+        document.title = "Time Town ⏱🏡 | A timer for pair programming";
       }
 
-      document.title = `${title} | Pizza Timer 🍕⏱️`;
+      document.title = `${title} | Time Town ⏱🏡`;
     },
 
     triggerEndOfTimer() {
@@ -178,7 +178,8 @@ function main() {
     },
 
     setTimerCurrentTime(newValue) {
-      if (this.debug) console.log("setTimerCurrentTime triggered with", newValue);
+      if (this.debug)
+        console.log("setTimerCurrentTime triggered with", newValue);
 
       this.state.timerCurrentTimeSeconds = newValue;
       this.setTimeProgressPercentage();
@@ -198,7 +199,8 @@ function main() {
     },
 
     setTimerIntervalSeconds(newValue) {
-      if (this.debug) console.log("setTimerIntervalSeconds triggered with", newValue);
+      if (this.debug)
+        console.log("setTimerIntervalSeconds triggered with", newValue);
       this.state.timerIntervalSeconds = newValue;
     },
 
@@ -221,7 +223,8 @@ function main() {
     },
 
     setTimerRepeatAtEndEnabled(newValue) {
-      if (this.debug) console.log("setTimeRepeatAtEnd triggered with", newValue);
+      if (this.debug)
+        console.log("setTimeRepeatAtEnd triggered with", newValue);
 
       if ("localStorage" in window) {
         window.localStorage.setItem("timerRepeatAtEndEnabled", newValue);
@@ -281,12 +284,14 @@ function main() {
     },
 
     setNotificationsDurationSeconds(newValue) {
-      if (this.debug) console.log("setNotificationsDurationSeconds triggered with", newValue);
+      if (this.debug)
+        console.log("setNotificationsDurationSeconds triggered with", newValue);
       this.state.notificationsDurationSeconds = newValue;
     },
 
     setNotificationsEnabled(newValue) {
-      if (this.debug) console.log("setNotificationsEnabled triggered with", newValue);
+      if (this.debug)
+        console.log("setNotificationsEnabled triggered with", newValue);
 
       if ("localStorage" in window) {
         window.localStorage.setItem("notificationsEnabled", newValue);
@@ -295,7 +300,8 @@ function main() {
     },
 
     handleNotificationPermission(newValue) {
-      if (this.debug) console.log("handleNotificationPermission triggered with", newValue);
+      if (this.debug)
+        console.log("handleNotificationPermission triggered with", newValue);
 
       this.state.notificationPermission = newValue;
 
@@ -314,14 +320,14 @@ function main() {
 
       const getTag = () => {
         if (test) {
-          return "pizza-timer-notification--test";
+          return "timer-notification--test";
         }
 
         if (timerRepeatAtEndEnabled) {
-          return "pizza-timer-notification--repeat";
+          return "timer-notification--repeat";
         }
 
-        return "pizza-timer-notification";
+        return "timer-notification";
       };
 
       const getActions = () => {
@@ -330,9 +336,7 @@ function main() {
         }
 
         if (timerRepeatAtEndEnabled) {
-          return [
-            { action: "stop", title: "Stop" }
-          ];
+          return [{ action: "stop", title: "Stop" }];
         }
 
         return [
@@ -362,8 +366,8 @@ function main() {
         tag: getTag(),
         requireInteraction: getRequireInteraction(),
         body,
-        badge: IMAGES.pizza,
-        icon: IMAGES.pizza,
+        badge: IMAGES.timer,
+        icon: IMAGES.timer,
         image,
         actions: getActions(),
         data: getData()
@@ -383,10 +387,11 @@ function main() {
     },
 
     setBrowserColorScheme(newValue) {
-      if (this.debug) console.log("setBrowserColorScheme triggered with", newValue);
+      if (this.debug)
+        console.log("setBrowserColorScheme triggered with", newValue);
 
       // if auto set meta color
-      if (this.state.colorScheme === 'auto') {
+      if (this.state.colorScheme === "auto") {
         setMetaThemeColor(newValue);
       }
 
@@ -400,7 +405,7 @@ function main() {
         window.localStorage.setItem("colorScheme", newValue);
       }
 
-      if (newValue === 'auto') {
+      if (newValue === "auto") {
         setMetaThemeColor(this.state.browserColorScheme);
       } else {
         setMetaThemeColor(newValue);
@@ -416,14 +421,14 @@ function main() {
     if (store.debug) console.log("Data from notificaton event", event.data);
     const { data } = event;
 
-    const dontDoAnthing = data.close ||
-                          data.dataSentToNotification.test; // test notification
+    const dontDoAnthing = data.close || data.dataSentToNotification.test; // test notification
     if (dontDoAnthing) {
       return;
     }
 
-    const stopTimer = data.dataSentToNotification.timerRepeatAtEndEnabled ||
-                      data.action === "stop";
+    const stopTimer =
+      data.dataSentToNotification.timerRepeatAtEndEnabled ||
+      data.action === "stop";
     if (stopTimer) {
       store.setTimerCurrentTime(0);
       store.setTimerPaused(false);
@@ -442,7 +447,10 @@ function main() {
     document.addEventListener(
       "visibilitychange",
       () => {
-        if (store.debug) console.log(document.hidden ? "Page in background" : "Page open in tab");
+        if (store.debug)
+          console.log(
+            document.hidden ? "Page in background" : "Page open in tab"
+          );
 
         if (store.timerRunning) {
           store.setTimerRunning(false);
@@ -466,22 +474,22 @@ function main() {
       }
 
       if (media === MEDIA_QUERY_DARK_COLOR_SCHEME) {
-        store.setBrowserColorScheme('dark');
+        store.setBrowserColorScheme("dark");
       } else if (media === MEDIA_QUERY_LIGHT_COLOR_SCHEME) {
-        store.setBrowserColorScheme('light');
+        store.setBrowserColorScheme("light");
       }
     }
 
     const mediaQueryDark = window.matchMedia(MEDIA_QUERY_DARK_COLOR_SCHEME);
     const mediaQueryLight = window.matchMedia(MEDIA_QUERY_LIGHT_COLOR_SCHEME);
-    
+
     mediaQueryDark.addListener(colorSchemeMediaQueryListener);
     mediaQueryLight.addListener(colorSchemeMediaQueryListener);
 
     if (mediaQueryDark.matches) {
-      store.setBrowserColorScheme('dark');
+      store.setBrowserColorScheme("dark");
     } else if (mediaQueryLight.matches) {
-      store.setBrowserColorScheme('light');
+      store.setBrowserColorScheme("light");
     }
   }
   detectColorScheme();
@@ -536,7 +544,7 @@ function main() {
       >
         <img
           class="loader__image"
-          src="${IMAGES.pizza}"
+          src="${IMAGES.timer}"
           role="presentation"
         />
         <div
@@ -591,9 +599,7 @@ function main() {
       store.setTimerEndTime(JSON.parse(timerEndTimeMinutes) * 60);
     }
 
-    const colorScheme = window.localStorage.getItem(
-      "colorScheme"
-    );
+    const colorScheme = window.localStorage.getItem("colorScheme");
     if (colorScheme !== null) {
       store.setColorScheme(colorScheme);
     }

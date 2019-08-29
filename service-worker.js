@@ -1,4 +1,4 @@
-const version = "2.0.0";
+const version = "3.0.0";
 
 self.addEventListener("install", event => {
   event.waitUntil(
@@ -7,7 +7,7 @@ self.addEventListener("install", event => {
         "/",
         "/js/bundle.js",
         "/css/main.css",
-        "/images/pizza.png",
+        "/images/timer.png",
         "/sounds/beano-yelp.mp3",
         "/sounds/bell.mp3",
         "/sounds/chief-chef.mp3",
