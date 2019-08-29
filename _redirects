@@ -1,0 +1,5 @@
+# Redirect domain aliases to primary domain
+https://timer.pizza/* https://timer.town/:splat 301!
+
+# Redirect default Netlify subdomain to primary domain
+https://timertown.netlify.com/* https://timer.town/:splat 301!
