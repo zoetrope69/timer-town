@@ -97,6 +97,26 @@
         </button>
 
         <h2>
+          Town
+        </h2>
+
+        <h3>
+          Town population count
+        </h3>
+        <p>{{ sharedState.timerCompleteCount }}</p>
+
+        <h3>
+          Town's people
+        </h3>
+
+        <ul class="towns-people" v-if="sharedState.timerCompleteCount > 0">
+          <li v-for="(item, index) in sharedState.townPeople">
+            {{ item }}
+          </li>
+        </ul>
+        <em v-else>No people have moved in... Get timing.</em>
+
+        <h2>
           Timer
         </h2>
 
