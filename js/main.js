@@ -1,5 +1,25 @@
 const DEBUG = false;
 
+const EMOJI = {
+  people: [
+    "🧍🏻‍♀️",
+    "🧍🏼‍♀️",
+    "🧍🏽‍♀️",
+    "🧍🏾‍♀️",
+    "🧍🏿‍♀️",
+    "🧍🏻",
+    "🧍🏼",
+    "🧍🏽",
+    "🧍🏾",
+    "🧍🏿",
+    "🧍🏻‍♂️",
+    "🧍🏼‍♂️",
+    "🧍🏽‍♂️",
+    "🧍🏾‍♂️",
+    "🧍🏿‍♂️"
+  ]
+};
+
 // See footer for credits for images and sounds
 
 const IMAGES = {
@@ -51,6 +71,7 @@ function parseTimeStringPart(timeString, timeAmountString) {
 }
 
 function formatTimeFromSeconds(seconds) {
+  console.log("seconds", seconds);
   const date = new Date(null);
   date.setSeconds(seconds);
   const timeString = date.toISOString().substr(11, 8);
@@ -72,6 +93,10 @@ function formatTimeFromSeconds(seconds) {
   }
 
   return niceTimeString.trim();
+}
+
+function randomPerson() {
+  return EMOJI.people[Math.floor(Math.random() * EMOJI.people.length)];
 }
 
 function main() {
@@ -102,6 +127,9 @@ function main() {
       timerProgressPercentage: 0,
       timerIntervalSeconds: 1,
       timerRepeatAtEndEnabled: false,
+      timerCompleteCount: 0,
+
+      townPeople: [],
 
       browserColorScheme: null,
       colorScheme: "auto"
@@ -140,6 +168,9 @@ function main() {
       if (!this.state.timerRepeatAtEndEnabled) {
         this.setTimerRunning(false);
       }
+
+      this.setTimerCompleteCount(this.state.timerCompleteCount + 1);
+      this.addTownPeople(randomPerson());
     },
 
     setTimeProgressPercentage() {
@@ -230,6 +261,34 @@ function main() {
         window.localStorage.setItem("timerRepeatAtEndEnabled", newValue);
       }
       this.state.timerRepeatAtEndEnabled = newValue;
+    },
+
+    setTimerCompleteCount(newValue) {
+      if (this.debug)
+        console.log("setTimerCompleteCount triggered with", newValue);
+
+      if ("localStorage" in window) {
+        window.localStorage.setItem("timerCompleteCount", newValue);
+      }
+      this.state.timerCompleteCount = newValue;
+    },
+
+    setTownPeople(newValue) {
+      if (this.debug) console.log("setTownPeople triggered with", newValue);
+
+      if ("localStorage" in window) {
+        window.localStorage.setItem("townPeople", JSON.stringify(newValue));
+      }
+      this.state.townPeople = newValue;
+    },
+
+    addTownPeople(newValue) {
+      if (this.debug) console.log("addTownPeople triggered with", newValue);
+
+      const newTownPeople = this.state.townPeople;
+      newTownPeople.push(newValue);
+
+      this.setTownPeople(newTownPeople);
     },
 
     setSoundName(newValue) {
@@ -597,6 +656,18 @@ function main() {
     );
     if (timerEndTimeMinutes !== null) {
       store.setTimerEndTime(JSON.parse(timerEndTimeMinutes) * 60);
+    }
+
+    const timerCompleteCount = window.localStorage.getItem(
+      "timerCompleteCount"
+    );
+    if (timerCompleteCount !== null) {
+      store.setTimerCompleteCount(JSON.parse(timerCompleteCount));
+    }
+
+    const townPeople = window.localStorage.getItem("townPeople");
+    if (townPeople !== null) {
+      store.setTownPeople(JSON.parse(townPeople));
     }
 
     const colorScheme = window.localStorage.getItem("colorScheme");
