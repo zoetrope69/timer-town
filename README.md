@@ -8,7 +8,7 @@ As this is a basic HTML page, need to uncomment the development scripts. Comment
 
 Then to serve this to a page run:
 
-````bash
+```bash
 npx serve
 ```
 
