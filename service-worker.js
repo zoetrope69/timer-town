@@ -1,10 +1,11 @@
-const version = "3.2.0";
+const version = "3.2.4";
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(version + "fundamentals").then((cache) => {
       return cache.addAll([
         "/",
+        "/web-worker.js",
         "/js/bundle.js",
         "/css/main.css",
         "/images/timer.png",
@@ -72,35 +73,27 @@ self.addEventListener("activate", (event) => {
   );
 });
 
-function sendMessageToClient(event, obj) {
-  self.clients.matchAll().then((clients) => {
-    clients.forEach((client) => {
-      if (event.notification.data.url !== client.url) {
-        return;
-      }
-
-      client.postMessage(obj);
-    });
-  });
-}
-
-self.addEventListener("notificationclose", (event) => {
-  event.waitUntil(
-    (async function () {
-      sendMessageToClient(event, { close: true });
-    })()
-  );
-});
-
 self.addEventListener("notificationclick", (event) => {
   event.notification.close();
 
+  /**
+   * if exists open browser tab with matching url just set focus to it,
+   * otherwise open new tab/window with sw root scope url
+   */
   event.waitUntil(
-    (async function () {
-      sendMessageToClient(event, {
-        dataSentToNotification: event.notification.data,
-        action: event.action,
-      });
-    })()
+    clients
+      .matchAll({
+        includeUncontrolled: true,
+        type: "window",
+      })
+      .then((clients) => {
+        const focusableClient = clients.find((client) => {
+          return client.url == self.registration.scope && "focus" in client;
+        });
+
+        if (focusableClient) {
+          focusableClient.focus();
+        }
+      })
   );
 });
