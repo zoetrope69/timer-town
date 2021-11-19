@@ -16,14 +16,14 @@ const EMOJI = {
     "🧍🏼‍♂️",
     "🧍🏽‍♂️",
     "🧍🏾‍♂️",
-    "🧍🏿‍♂️"
-  ]
+    "🧍🏿‍♂️",
+  ],
 };
 
 // See footer for credits for images and sounds
 
 const IMAGES = {
-  timer: "images/timer.png"
+  timer: "images/timer.png",
 };
 
 const SOUNDS = {
@@ -33,9 +33,10 @@ const SOUNDS = {
   "music-box": "sounds/music-box.mp3",
   "chief-chef": "sounds/chief-chef.mp3",
   "marshall-house": "sounds/marshall-house.mp3",
-  "beano-yelp": "sounds/beano-yelp.mp3"
+  "beano-yelp": "sounds/beano-yelp.mp3",
 };
 
+const TIMER_INTERVAL_SECONDS = 1;
 const DEFAULT_MINUTES_AMOUNT = 10;
 
 const MEDIA_QUERY_DARK_COLOR_SCHEME = "(prefers-color-scheme: dark)";
@@ -43,6 +44,31 @@ const MEDIA_QUERY_LIGHT_COLOR_SCHEME = "(prefers-color-scheme: light)";
 
 const MENU_DARK_COLOR_SCHEME = "#3d1e45";
 const MENU_LIGHT_COLOR_SCHEME = "#ffe0e0";
+
+const SUPPORTS_WEB_WORKERS = typeof Worker !== undefined;
+
+function webWorkerInterval(callback) {
+  const worker = new Worker("web-worker.js");
+
+  function handleWebWorkerMessage(event) {
+    const { data } = event;
+
+    if (DEBUG) console.log("Data from notificaton event", data);
+
+    if (data === "tick") {
+      callback();
+      return;
+    }
+  }
+
+  worker.addEventListener("message", handleWebWorkerMessage);
+
+  return worker;
+}
+
+function clearWebWorkerInterval(worker) {
+  if (worker) worker.terminate();
+}
 
 function setMetaThemeColor(colorScheme) {
   const element = document.querySelector("meta[name='theme-color']");
@@ -71,7 +97,6 @@ function parseTimeStringPart(timeString, timeAmountString) {
 }
 
 function formatTimeFromSeconds(seconds) {
-  console.log("seconds", seconds);
   const date = new Date(null);
   date.setSeconds(seconds);
   const timeString = date.toISOString().substr(11, 8);
@@ -116,7 +141,6 @@ function main() {
       notificationsDurationSeconds: 1,
 
       timer: null,
-      timerPaused: false,
       timerRunning: false,
       timerCurrentTimeSeconds: 0,
       timerEndTimeSeconds: DEFAULT_MINUTES_AMOUNT * 60,
@@ -125,28 +149,28 @@ function main() {
         DEFAULT_MINUTES_AMOUNT * 60
       ),
       timerProgressPercentage: 0,
-      timerIntervalSeconds: 1,
       timerRepeatAtEndEnabled: false,
       timerCompleteCount: 0,
 
       townPeople: [],
 
       browserColorScheme: null,
-      colorScheme: "auto"
+      colorScheme: "auto",
     },
 
     setTitle(title) {
-      if (this.debug) console.log("setTitle triggered");
+      if (DEBUG) console.log("setTitle triggered");
 
       if (!title) {
-        document.title = "Timer Town ⏱🏡 | A timer for pair programming";
+        document.title =
+          "Timer Town ⏱🏡 | A timer for Pomodoro technique and/or pair programing";
       }
 
       document.title = `${title} | Timer Town ⏱🏡`;
     },
 
     triggerEndOfTimer() {
-      if (this.debug) console.log("triggerEndOfTimer triggered");
+      if (DEBUG) console.log("triggerEndOfTimer triggered");
 
       if (this.state.audioEnabled) {
         this.state.audio.play();
@@ -155,9 +179,7 @@ function main() {
       if (this.state.notificationsEnabled) {
         this.spawnNotification({
           title: "Timer finished",
-          body: this.state.timerRepeatAtEndEnabled
-            ? "Timer starting again. Click to stop timer again."
-            : "Click to start timer again"
+          body: "Press/click to return to timer",
         });
       }
 
@@ -174,7 +196,7 @@ function main() {
     },
 
     setTimeProgressPercentage() {
-      if (this.debug) console.log("setTimeProgressPercentage triggered");
+      if (DEBUG) console.log("setTimeProgressPercentage triggered");
 
       const formattedTimeRemaining = formatTimeFromSeconds(
         this.state.timerEndTimeSeconds - this.state.timerCurrentTimeSeconds
@@ -189,7 +211,7 @@ function main() {
     },
 
     progressTimer() {
-      if (this.debug) console.log("progressTimer triggered");
+      if (DEBUG) console.log("progressTimer triggered");
 
       if (
         this.state.timerCurrentTimeSeconds >= this.state.timerEndTimeSeconds
@@ -199,25 +221,19 @@ function main() {
       }
 
       this.setTimerCurrentTime(
-        this.state.timerCurrentTimeSeconds + this.state.timerIntervalSeconds
+        this.state.timerCurrentTimeSeconds + TIMER_INTERVAL_SECONDS
       );
     },
 
-    setTimerPaused(newValue) {
-      if (this.debug) console.log("setTimerPaused triggered with", newValue);
-      this.state.timerPaused = newValue;
-    },
-
     setTimerCurrentTime(newValue) {
-      if (this.debug)
-        console.log("setTimerCurrentTime triggered with", newValue);
+      if (DEBUG) console.log("setTimerCurrentTime triggered with", newValue);
 
       this.state.timerCurrentTimeSeconds = newValue;
       this.setTimeProgressPercentage();
     },
 
     setTimerEndTime(newValue) {
-      if (this.debug) console.log("setTimerEndTime triggered with", newValue);
+      if (DEBUG) console.log("setTimerEndTime triggered with", newValue);
 
       this.state.timerEndTimeSeconds = newValue;
 
@@ -229,18 +245,30 @@ function main() {
       this.setTimeProgressPercentage();
     },
 
-    setTimerIntervalSeconds(newValue) {
-      if (this.debug)
-        console.log("setTimerIntervalSeconds triggered with", newValue);
-      this.state.timerIntervalSeconds = newValue;
-    },
-
     setTimerRunning(newValue) {
-      if (this.debug) console.log("setTimerRunning triggered with", newValue);
+      if (DEBUG) console.log("setTimerRunning triggered with", newValue);
 
       this.state.timerRunning = newValue;
 
-      if (newValue === false) {
+      if (SUPPORTS_WEB_WORKERS) {
+        if (DEBUG) console.log("Using Web Workers for timer");
+
+        if (this.state.timerRunning === false) {
+          clearWebWorkerInterval(this.state.timer);
+          this.state.timer = null;
+          return;
+        }
+
+        this.progressTimer();
+        this.state.timer = webWorkerInterval(
+          () => this.progressTimer(),
+          TIMER_INTERVAL_SECONDS * 1000
+        );
+        return;
+      }
+
+      // fallback if web workers dont work
+      if (this.state.timerRunning === false) {
         clearInterval(this.state.timer);
         this.state.timer = null;
         return;
@@ -249,13 +277,12 @@ function main() {
       this.progressTimer();
       this.state.timer = setInterval(
         () => this.progressTimer(),
-        this.state.timerIntervalSeconds * 1000
+        TIMER_INTERVAL_SECONDS * 1000
       );
     },
 
     setTimerRepeatAtEndEnabled(newValue) {
-      if (this.debug)
-        console.log("setTimeRepeatAtEnd triggered with", newValue);
+      if (DEBUG) console.log("setTimeRepeatAtEnd triggered with", newValue);
 
       if ("localStorage" in window) {
         window.localStorage.setItem("timerRepeatAtEndEnabled", newValue);
@@ -264,8 +291,7 @@ function main() {
     },
 
     setTimerCompleteCount(newValue) {
-      if (this.debug)
-        console.log("setTimerCompleteCount triggered with", newValue);
+      if (DEBUG) console.log("setTimerCompleteCount triggered with", newValue);
 
       if ("localStorage" in window) {
         window.localStorage.setItem("timerCompleteCount", newValue);
@@ -274,7 +300,7 @@ function main() {
     },
 
     setTownPeople(newValue) {
-      if (this.debug) console.log("setTownPeople triggered with", newValue);
+      if (DEBUG) console.log("setTownPeople triggered with", newValue);
 
       if ("localStorage" in window) {
         window.localStorage.setItem("townPeople", JSON.stringify(newValue));
@@ -283,7 +309,7 @@ function main() {
     },
 
     addTownPeople(newValue) {
-      if (this.debug) console.log("addTownPeople triggered with", newValue);
+      if (DEBUG) console.log("addTownPeople triggered with", newValue);
 
       const newTownPeople = this.state.townPeople;
       newTownPeople.push(newValue);
@@ -292,7 +318,7 @@ function main() {
     },
 
     setSoundName(newValue) {
-      if (this.debug) console.log("setSoundName triggered with", newValue);
+      if (DEBUG) console.log("setSoundName triggered with", newValue);
 
       if ("localStorage" in window) {
         window.localStorage.setItem("soundName", newValue);
@@ -304,7 +330,7 @@ function main() {
     },
 
     setAudio(newValue) {
-      if (this.debug) console.log("setAudio triggered with", newValue);
+      if (DEBUG) console.log("setAudio triggered with", newValue);
 
       const newAudio = new Audio(newValue);
       newAudio.preload = true;
@@ -313,7 +339,7 @@ function main() {
     },
 
     setCanPlayAudio(newValue) {
-      if (this.debug) console.log("setCanPlayAudio triggered with", newValue);
+      if (DEBUG) console.log("setCanPlayAudio triggered with", newValue);
 
       const canProbablyPlayAudio = newValue !== "";
 
@@ -327,7 +353,7 @@ function main() {
     },
 
     setAudioEnabled(newValue) {
-      if (this.debug) console.log("setAudioEnabled triggered with", newValue);
+      if (DEBUG) console.log("setAudioEnabled triggered with", newValue);
 
       if (this.state.audio) {
         if (newValue === false) {
@@ -343,13 +369,13 @@ function main() {
     },
 
     setNotificationsDurationSeconds(newValue) {
-      if (this.debug)
+      if (DEBUG)
         console.log("setNotificationsDurationSeconds triggered with", newValue);
       this.state.notificationsDurationSeconds = newValue;
     },
 
     setNotificationsEnabled(newValue) {
-      if (this.debug)
+      if (DEBUG)
         console.log("setNotificationsEnabled triggered with", newValue);
 
       if ("localStorage" in window) {
@@ -359,7 +385,7 @@ function main() {
     },
 
     handleNotificationPermission(newValue) {
-      if (this.debug)
+      if (DEBUG)
         console.log("handleNotificationPermission triggered with", newValue);
 
       this.state.notificationPermission = newValue;
@@ -372,10 +398,8 @@ function main() {
     },
 
     spawnNotification({ title, body, image, test }) {
-      const {
-        timerRepeatAtEndEnabled,
-        notificationsDurationSeconds
-      } = this.state;
+      const { timerRepeatAtEndEnabled, notificationsDurationSeconds } =
+        this.state;
 
       const getTag = () => {
         if (test) {
@@ -400,7 +424,7 @@ function main() {
 
         return [
           { action: "restart", title: "Restart" },
-          { action: "stop", title: "Stop" }
+          { action: "stop", title: "Stop" },
         ];
       };
 
@@ -417,7 +441,7 @@ function main() {
           test,
           timerRepeatAtEndEnabled,
           notificationsDurationSeconds,
-          url: location.href
+          url: location.href,
         };
       };
 
@@ -429,13 +453,13 @@ function main() {
         icon: IMAGES.timer,
         image,
         actions: getActions(),
-        data: getData()
+        data: getData(),
       };
 
-      navigator.serviceWorker.ready.then(registration => {
-        registration.getNotifications().then(notifications => {
+      navigator.serviceWorker.ready.then((registration) => {
+        registration.getNotifications().then((notifications) => {
           // close exisiting notifications
-          notifications.forEach(notification => {
+          notifications.forEach((notification) => {
             notification.close();
           });
 
@@ -446,8 +470,7 @@ function main() {
     },
 
     setBrowserColorScheme(newValue) {
-      if (this.debug)
-        console.log("setBrowserColorScheme triggered with", newValue);
+      if (DEBUG) console.log("setBrowserColorScheme triggered with", newValue);
 
       // if auto set meta color
       if (this.state.colorScheme === "auto") {
@@ -458,7 +481,7 @@ function main() {
     },
 
     setColorScheme(newValue) {
-      if (this.debug) console.log("setColorScheme triggered with", newValue);
+      if (DEBUG) console.log("setColorScheme triggered with", newValue);
 
       if ("localStorage" in window) {
         window.localStorage.setItem("colorScheme", newValue);
@@ -471,55 +494,10 @@ function main() {
       }
 
       this.state.colorScheme = newValue;
-    }
+    },
   };
 
   navigator.serviceWorker.register("service-worker.js");
-
-  navigator.serviceWorker.addEventListener("message", event => {
-    if (store.debug) console.log("Data from notificaton event", event.data);
-    const { data } = event;
-
-    const dontDoAnthing = data.close || data.dataSentToNotification.test; // test notification
-    if (dontDoAnthing) {
-      return;
-    }
-
-    const stopTimer =
-      data.dataSentToNotification.timerRepeatAtEndEnabled ||
-      data.action === "stop";
-    if (stopTimer) {
-      store.setTimerCurrentTime(0);
-      store.setTimerPaused(false);
-      store.setTimerRunning(false);
-      return;
-    }
-
-    // otherwise you've clicked the notification/start button
-    // start the timer again
-    store.setTimerCurrentTime(0);
-    store.setTimerRunning(true);
-  });
-
-  // if visibility change api available
-  if (document.hidden !== undefined) {
-    document.addEventListener(
-      "visibilitychange",
-      () => {
-        if (store.debug)
-          console.log(
-            document.hidden ? "Page in background" : "Page open in tab"
-          );
-
-        if (store.timerRunning) {
-          store.setTimerRunning(false);
-          store.setTimerIntervalSeconds(document.hidden ? 2 : 1);
-          store.setTimerRunning(true);
-        }
-      },
-      false
-    );
-  }
 
   // detect color schemes dark/light
   function detectColorScheme() {
@@ -576,24 +554,24 @@ function main() {
           {{ label }}
         </span>
       </div>
-    `
+    `,
   });
 
   Vue.component("loader", {
     props: ["isTimerRunning", "timerProgressPercentage"],
 
     methods: {
-      loaderBarStyles: function() {
+      loaderBarStyles: function () {
         return { height: `${this.calcuateHeightOfLoaderBar()}%` };
       },
 
-      calcuateHeightOfLoaderBar: function() {
+      calcuateHeightOfLoaderBar: function () {
         if (!this.isTimerRunning) {
           return 0;
         }
 
         return 100 - this.timerProgressPercentage;
-      }
+      },
     },
 
     template: `
@@ -612,7 +590,7 @@ function main() {
         >
         </div>
       </div>
-    `
+    `,
   });
 
   const testAudio = new Audio("");
@@ -625,7 +603,7 @@ function main() {
   }
 
   if ("localStorage" in window) {
-    if (store.debug) console.log(window.localStorage);
+    if (DEBUG) console.log(window.localStorage);
 
     const audioEnabled = window.localStorage.getItem("audioEnabled");
     if (audioEnabled !== null) {
@@ -658,9 +636,8 @@ function main() {
       store.setTimerEndTime(JSON.parse(timerEndTimeMinutes) * 60);
     }
 
-    const timerCompleteCount = window.localStorage.getItem(
-      "timerCompleteCount"
-    );
+    const timerCompleteCount =
+      window.localStorage.getItem("timerCompleteCount");
     if (timerCompleteCount !== null) {
       store.setTimerCompleteCount(JSON.parse(timerCompleteCount));
     }
@@ -680,91 +657,89 @@ function main() {
     el: "#app",
     data: {
       privateState: {},
-      sharedState: store.state
+      sharedState: store.state,
     },
     methods: {
-      handleToggleAudioClick: function() {
+      handleToggleAudioClick: function () {
         store.setAudioEnabled(!this.sharedState.audioEnabled);
       },
 
-      handleTestAudioClick: function() {
+      handleTestAudioClick: function () {
         this.sharedState.audio.pause();
         this.sharedState.audio.currentTime = 0;
         this.sharedState.audio.play();
       },
 
-      handleStopAudio: function() {
+      handleStopAudio: function () {
         this.sharedState.audio.pause();
         this.sharedState.audio.currentTime = 0;
       },
 
-      handleAudioSelectChange: function(event) {
+      handleAudioSelectChange: function (event) {
         const newSoundName = event.target.value;
         store.setSoundName(newSoundName);
       },
 
-      handleToggleNotificationsClick: function() {
+      handleToggleNotificationsClick: function () {
         if (this.sharedState.notificationsEnabled) {
           store.setNotificationsEnabled(false);
           return;
         }
 
-        Notification.requestPermission().then(permission => {
+        Notification.requestPermission().then((permission) => {
           store.handleNotificationPermission(permission);
         });
       },
 
-      handleTestNotificationsClick: function() {
+      handleTestNotificationsClick: function () {
+        console.log("hello lol");
         store.spawnNotification({
           title: "This is a test notification",
-          test: true
+          test: true,
         });
       },
 
-      handleStartPauseTimerClick: function() {
+      handleStartPauseTimerClick: function () {
         this.handleStopAudio();
 
-        if (!this.sharedState.timer) {
+        if (!this.sharedState.timerRunning) {
           store.setTimerCurrentTime(0);
           store.setTimerRunning(true);
-          store.setTimerPaused(false);
           return;
         }
 
         store.setTimerRunning(false);
-        store.setTimerPaused(!this.sharedState.timerPause);
       },
 
-      handleResetTimerClick: function() {
+      handleResetTimerClick: function () {
         store.setTimerCurrentTime(0);
-        store.setTimerPaused(false);
         store.setTimerRunning(false);
         this.handleStopAudio();
       },
 
-      handleTimerEndTimeMinutesChange: function(e) {
+      handleTimerEndTimeMinutesChange: function (e) {
         const newValue = e.target.value;
         store.setTimerEndTime(newValue * 60);
       },
 
-      handleTimerRepeatAtEndEnabledClick: function(e) {
+      handleTimerRepeatAtEndEnabledClick: function (e) {
         store.setTimerRepeatAtEndEnabled(
           !this.sharedState.timerRepeatAtEndEnabled
         );
       },
 
-      handleColorSchemeSelectChange: function(e) {
+      handleColorSchemeSelectChange: function (e) {
         const newValue = e.target.value;
         store.setColorScheme(newValue);
       },
 
-      handleClearDataClick: function() {
+      handleClearDataClick: function () {
         if ("localStorage" in window) {
           window.localStorage.clear();
         }
         window.location = window.location;
-      }
-    }
+      },
+    },
   });
 }
 

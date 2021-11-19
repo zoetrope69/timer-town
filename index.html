@@ -4,15 +4,21 @@
     <title>Timer Town ⏱🏡</title>
     <meta
       name="title"
-      content="Timer Town ⏱🏡 | A timer for pair programming"
+      content="Timer Town ⏱🏡 | A timer for Pomodoro technique and/or pair programing"
     />
-    <meta name="description" content="A timer for pair programming" />
+    <meta
+      name="description"
+      content="A timer for Pomodoro technique and/or pair programing"
+    />
 
     <!-- open Graph / facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://timer.town/" />
     <meta property="og:title" content="Timer Town ⏱🏡" />
-    <meta property="og:description" content="A timer for pair programming" />
+    <meta
+      property="og:description"
+      content="A timer for Pomodoro technique and/or pair programing"
+    />
     <meta property="og:image" content="images/share-image.png" />
 
     <!-- twitter -->
@@ -21,7 +27,7 @@
     <meta property="twitter:title" content="Timer Town ⏱🏡" />
     <meta
       property="twitter:description"
-      content="A timer for pair programming"
+      content="A timer for Pomodoro technique and/or pair programing"
     />
     <meta property="twitter:image" content="images/share-image.png" />
 
@@ -34,15 +40,15 @@
     <link rel="shortcut icon" href="images/timer.png" type="image/x-icon" />
 
     <link rel="preload" href="css/main.css" as="style" />
-    <link rel="preload" href="js/bundle.js" as="script" />
 
     <link rel="stylesheet" type="text/css" href="css/main.css" />
 
     <!-- development version, includes helpful console warnings -->
-    <!-- <script src="js/vue.js"></script> -->
-    <!-- <script src="js/main.js"></script> -->
+    <!-- <script src="js/vue.js"></script>
+    <script src="js/main.js"></script> -->
 
     <!-- production version, optimized for size and speed -->
+    <link rel="preload" href="js/bundle.js" as="script" />
     <script src="js/bundle.js" defer></script>
   </head>
 
@@ -56,19 +62,15 @@
           class="faded"
           :class="{ 'faded--active': sharedState.timerRunning }"
         >
-          <h1 class="title">
-            Timer Town
-          </h1>
-          <p class="sub-title">A timer for pair programming</p>
+          <h1 class="title">Timer Town</h1>
+          <p class="sub-title">
+            A timer for Pomodoro technique and/or pair programing
+          </p>
         </div>
 
         <div class="timer">
-          <span v-cloak>
-            {{ sharedState.timerRemainingTimeFormatted }}
-          </span>
-          <span v-if="false" class="loading--invisible">
-            0s
-          </span>
+          <span v-cloak> {{ sharedState.timerRemainingTimeFormatted }} </span>
+          <span v-if="false" class="loading--invisible"> 0s </span>
 
           <loader
             :is-timer-running="sharedState.timerRunning"
@@ -84,9 +86,7 @@
           <span v-cloak>
             {{ sharedState.timerRunning ? 'Stop' : 'Start' }}
           </span>
-          <span v-if="false">
-            Start
-          </span>
+          <span v-if="false"> Start </span>
         </button>
 
         <button
@@ -96,29 +96,22 @@
           Reset
         </button>
 
-        <h2>
-          Town
-        </h2>
+        <h2>Town</h2>
 
-        <h3>
-          Town population count
-        </h3>
+        <h3>Town population count</h3>
         <p>{{ sharedState.timerCompleteCount }}</p>
 
-        <h3>
-          Town's people
-        </h3>
+        <h3>Town's people</h3>
 
         <ul class="towns-people" v-if="sharedState.timerCompleteCount > 0">
-          <li v-for="(item, index) in sharedState.townPeople">
-            {{ item }}
-          </li>
+          <li v-for="(item, index) in sharedState.townPeople">{{ item }}</li>
         </ul>
-        <em v-else>No people have moved in... Get timing.</em>
+        <div v-else>
+          <em>No people have moved in...</em>
+          <p>As you finish timers people will move into your town. Have fun!</p>
+        </div>
 
-        <h2>
-          Timer
-        </h2>
+        <h2>Settings</h2>
 
         <div class="input">
           <label class="input__label" for="timer-end-time">
@@ -143,9 +136,7 @@
         >
         </toggle-button>
 
-        <h2>
-          Audio
-        </h2>
+        <h2>Audio</h2>
 
         <toggle-button
           :id="'audio-enabled'"
@@ -156,9 +147,7 @@
         </toggle-button>
 
         <div v-if="sharedState.audioEnabled" class="input">
-          <label class="input__label" for="sound-select">
-            Sound
-          </label>
+          <label class="input__label" for="sound-select"> Sound </label>
 
           <select
             id="sound-select"
@@ -213,9 +202,7 @@
           Test audio
         </button>
 
-        <h2>
-          Notifications
-        </h2>
+        <h2>Notifications</h2>
 
         <toggle-button
           :id="'notifications-enabled'"
