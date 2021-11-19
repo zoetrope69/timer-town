@@ -34,6 +34,7 @@ const SOUNDS = {
   "chief-chef": "sounds/chief-chef.mp3",
   "marshall-house": "sounds/marshall-house.mp3",
   "beano-yelp": "sounds/beano-yelp.mp3",
+  "cow-moo": "sounds/cow-moo.mp3",
 };
 
 const TIMER_INTERVAL_SECONDS = 1;

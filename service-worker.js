@@ -1,4 +1,4 @@
-const version = "3.2.4";
+const version = "3.2.5";
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -12,10 +12,11 @@ self.addEventListener("install", (event) => {
         "/sounds/beano-yelp.mp3",
         "/sounds/bell.mp3",
         "/sounds/chief-chef.mp3",
+        "/sounds/cow-moo.mp3",
         "/sounds/foghorn.mp3",
         "/sounds/gong.mp3",
-        "/sounds/music-box.mp3",
         "/sounds/marshall-house.mp3",
+        "/sounds/music-box.mp3",
       ]);
     })
   );
