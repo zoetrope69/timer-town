@@ -1,8 +1,8 @@
 const version = "3.2.0";
 
-self.addEventListener("install", event => {
+self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(version + "fundamentals").then(cache => {
+    caches.open(version + "fundamentals").then((cache) => {
       return cache.addAll([
         "/",
         "/js/bundle.js",
@@ -14,19 +14,19 @@ self.addEventListener("install", event => {
         "/sounds/foghorn.mp3",
         "/sounds/gong.mp3",
         "/sounds/music-box.mp3",
-        "/sounds/marshall-house.mp3"
+        "/sounds/marshall-house.mp3",
       ]);
     })
   );
 });
 
-self.addEventListener("fetch", event => {
+self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") {
     return;
   }
 
   event.respondWith(
-    caches.match(event.request).then(cached => {
+    caches.match(event.request).then((cached) => {
       var networked = fetch(event.request)
         .then(fetchedFromNetwork, unableToResolve)
         .catch(unableToResolve);
@@ -48,23 +48,23 @@ self.addEventListener("fetch", event => {
           status: 503,
           statusText: "Service Unavailable",
           headers: new Headers({
-            "Content-Type": "text/html"
-          })
+            "Content-Type": "text/html",
+          }),
         });
       }
     })
   );
 });
 
-self.addEventListener("activate", event => {
+self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches.keys().then(keys => {
+    caches.keys().then((keys) => {
       return Promise.all(
         keys
-          .filter(key => {
+          .filter((key) => {
             return !key.startsWith(version);
           })
-          .map(key => {
+          .map((key) => {
             return caches.delete(key);
           })
       );
@@ -73,8 +73,8 @@ self.addEventListener("activate", event => {
 });
 
 function sendMessageToClient(event, obj) {
-  self.clients.matchAll().then(clients => {
-    clients.forEach(client => {
+  self.clients.matchAll().then((clients) => {
+    clients.forEach((client) => {
       if (event.notification.data.url !== client.url) {
         return;
       }
@@ -84,22 +84,22 @@ function sendMessageToClient(event, obj) {
   });
 }
 
-self.addEventListener("notificationclose", event => {
+self.addEventListener("notificationclose", (event) => {
   event.waitUntil(
-    (async function() {
+    (async function () {
       sendMessageToClient(event, { close: true });
     })()
   );
 });
 
-self.addEventListener("notificationclick", event => {
+self.addEventListener("notificationclick", (event) => {
   event.notification.close();
 
   event.waitUntil(
-    (async function() {
+    (async function () {
       sendMessageToClient(event, {
         dataSentToNotification: event.notification.data,
-        action: event.action
+        action: event.action,
       });
     })()
   );

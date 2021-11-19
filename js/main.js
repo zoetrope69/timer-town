@@ -16,14 +16,14 @@ const EMOJI = {
     "🧍🏼‍♂️",
     "🧍🏽‍♂️",
     "🧍🏾‍♂️",
-    "🧍🏿‍♂️"
-  ]
+    "🧍🏿‍♂️",
+  ],
 };
 
 // See footer for credits for images and sounds
 
 const IMAGES = {
-  timer: "images/timer.png"
+  timer: "images/timer.png",
 };
 
 const SOUNDS = {
@@ -33,7 +33,7 @@ const SOUNDS = {
   "music-box": "sounds/music-box.mp3",
   "chief-chef": "sounds/chief-chef.mp3",
   "marshall-house": "sounds/marshall-house.mp3",
-  "beano-yelp": "sounds/beano-yelp.mp3"
+  "beano-yelp": "sounds/beano-yelp.mp3",
 };
 
 const DEFAULT_MINUTES_AMOUNT = 10;
@@ -132,7 +132,7 @@ function main() {
       townPeople: [],
 
       browserColorScheme: null,
-      colorScheme: "auto"
+      colorScheme: "auto",
     },
 
     setTitle(title) {
@@ -157,7 +157,7 @@ function main() {
           title: "Timer finished",
           body: this.state.timerRepeatAtEndEnabled
             ? "Timer starting again. Click to stop timer again."
-            : "Click to start timer again"
+            : "Click to start timer again",
         });
       }
 
@@ -372,10 +372,8 @@ function main() {
     },
 
     spawnNotification({ title, body, image, test }) {
-      const {
-        timerRepeatAtEndEnabled,
-        notificationsDurationSeconds
-      } = this.state;
+      const { timerRepeatAtEndEnabled, notificationsDurationSeconds } =
+        this.state;
 
       const getTag = () => {
         if (test) {
@@ -400,7 +398,7 @@ function main() {
 
         return [
           { action: "restart", title: "Restart" },
-          { action: "stop", title: "Stop" }
+          { action: "stop", title: "Stop" },
         ];
       };
 
@@ -417,7 +415,7 @@ function main() {
           test,
           timerRepeatAtEndEnabled,
           notificationsDurationSeconds,
-          url: location.href
+          url: location.href,
         };
       };
 
@@ -429,13 +427,13 @@ function main() {
         icon: IMAGES.timer,
         image,
         actions: getActions(),
-        data: getData()
+        data: getData(),
       };
 
-      navigator.serviceWorker.ready.then(registration => {
-        registration.getNotifications().then(notifications => {
+      navigator.serviceWorker.ready.then((registration) => {
+        registration.getNotifications().then((notifications) => {
           // close exisiting notifications
-          notifications.forEach(notification => {
+          notifications.forEach((notification) => {
             notification.close();
           });
 
@@ -471,12 +469,12 @@ function main() {
       }
 
       this.state.colorScheme = newValue;
-    }
+    },
   };
 
   navigator.serviceWorker.register("service-worker.js");
 
-  navigator.serviceWorker.addEventListener("message", event => {
+  navigator.serviceWorker.addEventListener("message", (event) => {
     if (store.debug) console.log("Data from notificaton event", event.data);
     const { data } = event;
 
@@ -576,24 +574,24 @@ function main() {
           {{ label }}
         </span>
       </div>
-    `
+    `,
   });
 
   Vue.component("loader", {
     props: ["isTimerRunning", "timerProgressPercentage"],
 
     methods: {
-      loaderBarStyles: function() {
+      loaderBarStyles: function () {
         return { height: `${this.calcuateHeightOfLoaderBar()}%` };
       },
 
-      calcuateHeightOfLoaderBar: function() {
+      calcuateHeightOfLoaderBar: function () {
         if (!this.isTimerRunning) {
           return 0;
         }
 
         return 100 - this.timerProgressPercentage;
-      }
+      },
     },
 
     template: `
@@ -612,7 +610,7 @@ function main() {
         >
         </div>
       </div>
-    `
+    `,
   });
 
   const testAudio = new Audio("");
@@ -658,9 +656,8 @@ function main() {
       store.setTimerEndTime(JSON.parse(timerEndTimeMinutes) * 60);
     }
 
-    const timerCompleteCount = window.localStorage.getItem(
-      "timerCompleteCount"
-    );
+    const timerCompleteCount =
+      window.localStorage.getItem("timerCompleteCount");
     if (timerCompleteCount !== null) {
       store.setTimerCompleteCount(JSON.parse(timerCompleteCount));
     }
@@ -680,48 +677,48 @@ function main() {
     el: "#app",
     data: {
       privateState: {},
-      sharedState: store.state
+      sharedState: store.state,
     },
     methods: {
-      handleToggleAudioClick: function() {
+      handleToggleAudioClick: function () {
         store.setAudioEnabled(!this.sharedState.audioEnabled);
       },
 
-      handleTestAudioClick: function() {
+      handleTestAudioClick: function () {
         this.sharedState.audio.pause();
         this.sharedState.audio.currentTime = 0;
         this.sharedState.audio.play();
       },
 
-      handleStopAudio: function() {
+      handleStopAudio: function () {
         this.sharedState.audio.pause();
         this.sharedState.audio.currentTime = 0;
       },
 
-      handleAudioSelectChange: function(event) {
+      handleAudioSelectChange: function (event) {
         const newSoundName = event.target.value;
         store.setSoundName(newSoundName);
       },
 
-      handleToggleNotificationsClick: function() {
+      handleToggleNotificationsClick: function () {
         if (this.sharedState.notificationsEnabled) {
           store.setNotificationsEnabled(false);
           return;
         }
 
-        Notification.requestPermission().then(permission => {
+        Notification.requestPermission().then((permission) => {
           store.handleNotificationPermission(permission);
         });
       },
 
-      handleTestNotificationsClick: function() {
+      handleTestNotificationsClick: function () {
         store.spawnNotification({
           title: "This is a test notification",
-          test: true
+          test: true,
         });
       },
 
-      handleStartPauseTimerClick: function() {
+      handleStartPauseTimerClick: function () {
         this.handleStopAudio();
 
         if (!this.sharedState.timer) {
@@ -735,36 +732,36 @@ function main() {
         store.setTimerPaused(!this.sharedState.timerPause);
       },
 
-      handleResetTimerClick: function() {
+      handleResetTimerClick: function () {
         store.setTimerCurrentTime(0);
         store.setTimerPaused(false);
         store.setTimerRunning(false);
         this.handleStopAudio();
       },
 
-      handleTimerEndTimeMinutesChange: function(e) {
+      handleTimerEndTimeMinutesChange: function (e) {
         const newValue = e.target.value;
         store.setTimerEndTime(newValue * 60);
       },
 
-      handleTimerRepeatAtEndEnabledClick: function(e) {
+      handleTimerRepeatAtEndEnabledClick: function (e) {
         store.setTimerRepeatAtEndEnabled(
           !this.sharedState.timerRepeatAtEndEnabled
         );
       },
 
-      handleColorSchemeSelectChange: function(e) {
+      handleColorSchemeSelectChange: function (e) {
         const newValue = e.target.value;
         store.setColorScheme(newValue);
       },
 
-      handleClearDataClick: function() {
+      handleClearDataClick: function () {
         if ("localStorage" in window) {
           window.localStorage.clear();
         }
         window.location = window.location;
-      }
-    }
+      },
+    },
   });
 }
 

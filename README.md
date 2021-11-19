@@ -16,4 +16,4 @@ npx serve
 
 ```bash
 npx terser --compress --mangle -o js/bundle.js -- js/main.js js/vue.min.js
-````
+```
