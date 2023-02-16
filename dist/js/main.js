@@ -539,7 +539,7 @@ function main() {
       <div class="toggle">
         <button
           role="switch"
-          aria-labelledby="id"
+          :aria-labelledby="id"
           v-on:click="onClick"
           :aria-checked="isActive.toString()"
           class="toggle__button"
@@ -550,7 +550,7 @@ function main() {
 
         <span
           class="toggle__label"
-          id="id"
+          :id="id"
         >
           {{ label }}
         </span>
