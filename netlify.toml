@@ -2,9 +2,9 @@
 package = "netlify-plugin-csp-generator"
 
   [plugins.inputs]
+  generateForAllFiles = true
   buildDir = "dist"
 
   [plugins.inputs.policies]
-    generateForAllFiles = true
     defaultSrc = "'self'"
     styleSrc = "'unsafe-hashes'"
