@@ -2,4 +2,5 @@
 package = "netlify-plugin-csp-generator"
 
   [plugins.inputs]
+  generateForAllFiles = true
   buildDir = "dist"
