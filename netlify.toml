@@ -3,3 +3,7 @@ package = "netlify-plugin-csp-generator"
 
   [plugins.inputs]
   buildDir = "dist"
+
+  [plugins.inputs.policies]
+    defaultSrc = "'self'"
+    styleSrc = "'unsafe-hashes'"
