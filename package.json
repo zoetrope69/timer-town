@@ -18,7 +18,6 @@
   },
   "homepage": "https://github.com/zactopus/timer-town#readme",
   "dependencies": {
-    "netlify-plugin-csp-generator": "^1.5.0",
     "terser": "^5.16.3"
   }
 }
