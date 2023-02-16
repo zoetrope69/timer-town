@@ -1,0 +1,23 @@
+{
+  "name": "timer-town",
+  "version": "1.0.0",
+  "description": "A timer for Pomodoro technique and/or pair programing",
+  "main": "service-worker.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zactopus/timer-town.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zactopus/timer-town/issues"
+  },
+  "homepage": "https://github.com/zactopus/timer-town#readme",
+  "dependencies": {
+    "netlify-plugin-csp-generator": "^1.5.0"
+  }
+}
