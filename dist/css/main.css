@@ -103,8 +103,12 @@ body {
 }
 
 .footer__credits__item {
-  margin-bottom: 0.25em;
   list-style-position: inside;
+}
+
+.footer__credits__link {
+  padding: 0.5em 0;
+  display: inline-block;
 }
 
 .footer__credits__link,
