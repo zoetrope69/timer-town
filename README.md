@@ -4,16 +4,13 @@ A timer for Pomodoro technique and/or pair programing
 
 ## Development
 
-As this is a basic HTML page, need to uncomment the development scripts. Comment the production script.
+```
+npm install
+npm run build
+```
 
 Then to serve this to a page run:
 
 ```bash
 npx serve
-```
-
-## JavaScript minification
-
-```bash
-npx terser --compress --mangle -o js/bundle.js -- js/main.js js/vue.min.js
 ```
